@@ -9,30 +9,33 @@ const ProjectsSection = () => {
   const projects = [
     {
       id: 1,
-      title: 'E-Commerce Dashboard',
-      description: 'A comprehensive dashboard for managing e-commerce operations with real-time analytics and inventory management.',
+      title: 'Analytics Dashboard',
+      description: 'A comprehensive dashboard for data visualization with real-time analytics, interactive charts, and customizable widgets for business intelligence.',
       image: project1,
       demoLink: 'https://demo-link.com',
       repoLink: 'https://github.com/username/project1',
-      technologies: ['React', 'Node.js', 'MongoDB', 'Chart.js']
+      technologies: ['React', 'D3.js', 'Node.js', 'PostgreSQL'],
+      category: 'Web App'
     },
     {
       id: 2,
-      title: 'Mobile Task Manager',
-      description: 'A responsive task management application with drag-and-drop functionality and team collaboration features.',
+      title: 'Task Management Suite',
+      description: 'A sophisticated task management application featuring drag-and-drop functionality, team collaboration, and productivity analytics.',
       image: project2,
       demoLink: 'https://demo-link.com',
       repoLink: 'https://github.com/username/project2',
-      technologies: ['React Native', 'Firebase', 'Redux', 'TypeScript']
+      technologies: ['React Native', 'Firebase', 'Redux', 'TypeScript'],
+      category: 'Mobile App'
     },
     {
       id: 3,
-      title: 'Shopping Platform',
-      description: 'Modern e-commerce platform with advanced search, filtering, and secure payment processing capabilities.',
+      title: 'Creative Portfolio Platform',
+      description: 'An elegant portfolio platform for creatives with advanced gallery features, customizable themes, and seamless content management.',
       image: project3,
       demoLink: 'https://demo-link.com',
       repoLink: 'https://github.com/username/project3',
-      technologies: ['Next.js', 'Stripe', 'PostgreSQL', 'Tailwind CSS']
+      technologies: ['Next.js', 'Headless CMS', 'Tailwind CSS', 'Framer Motion'],
+      category: 'Web Platform'
     }
   ];
 
@@ -47,46 +50,65 @@ const ProjectsSection = () => {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project) => (
-            <Card key={project.id} className="card-glass hover-lift group">
+          {projects.map((project, index) => (
+            <Card 
+              key={project.id} 
+              className="card-glass hover-lift group relative overflow-hidden"
+              style={{ animationDelay: `${index * 200}ms` }}
+            >
+              {/* Category badge */}
+              <div className="absolute top-4 left-4 z-10">
+                <span className="px-3 py-1 text-xs font-medium bg-primary/20 text-primary rounded-full border border-primary/30 backdrop-blur-sm">
+                  {project.category}
+                </span>
+              </div>
+              
               <div className="relative overflow-hidden rounded-t-lg">
                 <img
                   src={project.image}
                   alt={project.title}
-                  className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
+                  className="w-full h-56 object-cover transition-all duration-500 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                
+                {/* Overlay buttons */}
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+                  <div className="flex gap-3">
+                    <Button size="sm" className="btn-hero">
+                      <ExternalLink className="w-4 h-4 mr-2" />
+                      Demo
+                    </Button>
+                    <Button size="sm" variant="outline" className="bg-background/20 backdrop-blur-sm border-white/20 text-white hover:bg-white/20">
+                      <Github className="w-4 h-4 mr-2" />
+                      Code
+                    </Button>
+                  </div>
+                </div>
               </div>
               
-              <CardHeader>
-                <CardTitle className="text-xl">{project.title}</CardTitle>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-xl font-display group-hover:text-primary transition-colors">
+                  {project.title}
+                </CardTitle>
               </CardHeader>
               
               <CardContent className="space-y-4">
-                <p className="text-muted-foreground">{project.description}</p>
+                <p className="text-muted-foreground leading-relaxed">{project.description}</p>
                 
                 <div className="flex flex-wrap gap-2">
-                  {project.technologies.map((tech, index) => (
+                  {project.technologies.map((tech, techIndex) => (
                     <span
-                      key={index}
-                      className="px-2 py-1 text-xs bg-primary/10 text-primary rounded border border-primary/20"
+                      key={techIndex}
+                      className="skill-tag px-3 py-1 text-xs font-medium text-primary rounded-full"
                     >
                       {tech}
                     </span>
                   ))}
                 </div>
-                
-                <div className="flex gap-3 pt-4">
-                  <Button size="sm" variant="outline" className="flex-1">
-                    <ExternalLink className="w-4 h-4 mr-2" />
-                    Demo
-                  </Button>
-                  <Button size="sm" variant="outline" className="flex-1">
-                    <Github className="w-4 h-4 mr-2" />
-                    Code
-                  </Button>
-                </div>
               </CardContent>
+              
+              {/* Decorative border */}
+              <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary to-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </Card>
           ))}
         </div>

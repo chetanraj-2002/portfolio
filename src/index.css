@@ -2,64 +2,58 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Portfolio Design System - Modern Purple Theme */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+/* Elegant Portfolio Design System */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap');
 
 @layer base {
   :root {
-    /* Base Colors */
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-
-    /* Card Colors */
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-
-    /* Popover Colors */
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-
-    /* Brand Colors - Purple Theme */
-    --primary: 263 70% 50%;
-    --primary-foreground: 0 0% 98%;
-    --primary-glow: 263 70% 60%;
-
-    /* Secondary Colors */
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-
-    /* Muted Colors */
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-
-    /* Accent Colors */
-    --accent: 263 70% 50%;
-    --accent-foreground: 0 0% 98%;
-
-    /* Status Colors */
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-
-    /* Border and Input */
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 263 70% 50%;
-
-    /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
-    --gradient-hero: linear-gradient(135deg, hsl(240 10% 3.9%), hsl(240 8% 8%));
-    --gradient-card: linear-gradient(145deg, hsl(240 10% 6%), hsl(240 8% 10%));
-
-    /* Shadows */
-    --shadow-elegant: 0 10px 30px -10px hsl(var(--primary) / 0.3);
-    --shadow-glow: 0 0 40px hsl(var(--primary-glow) / 0.4);
-    --shadow-card: 0 8px 32px hsl(0 0% 0% / 0.3);
-
-    /* Animations */
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-bounce: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-
-    --radius: 0.5rem;
+    /* Elegant Modern Theme */
+    --background: 220 20% 4%;
+    --foreground: 220 12% 95%;
+    
+    --card: 220 20% 6%;
+    --card-foreground: 220 12% 95%;
+    
+    --popover: 220 20% 6%;
+    --popover-foreground: 220 12% 95%;
+    
+    --primary: 280 100% 70%;
+    --primary-foreground: 220 20% 4%;
+    --primary-glow: 285 100% 80%;
+    
+    --secondary: 220 20% 10%;
+    --secondary-foreground: 220 12% 95%;
+    
+    --muted: 220 20% 10%;
+    --muted-foreground: 220 12% 65%;
+    
+    --accent: 260 90% 65%;
+    --accent-foreground: 220 20% 4%;
+    
+    --destructive: 0 65% 55%;
+    --destructive-foreground: 0 85% 97%;
+    
+    --border: 220 20% 12%;
+    --input: 220 20% 8%;
+    --ring: 280 100% 70%;
+    
+    --radius: 0.75rem;
+    
+    /* Elegant gradients and effects */
+    --gradient-primary: linear-gradient(135deg, hsl(280, 100%, 70%), hsl(260, 90%, 65%));
+    --gradient-secondary: linear-gradient(135deg, hsl(220, 20%, 6%), hsl(220, 20%, 10%));
+    --gradient-bg: radial-gradient(ellipse at top, hsl(280, 100%, 70%, 0.1) 0%, hsl(220, 20%, 4%) 50%);
+    --gradient-card: linear-gradient(135deg, hsl(220, 20%, 6%, 0.8), hsl(220, 20%, 8%, 0.9));
+    --gradient-hero: linear-gradient(135deg, hsl(280, 100%, 70%, 0.15) 0%, hsl(260, 90%, 65%, 0.1) 100%);
+    
+    --shadow-elegant: 0 25px 50px -12px hsl(280, 100%, 70%, 0.25);
+    --shadow-glow: 0 0 50px hsl(280, 100%, 70%, 0.3);
+    --shadow-card: 0 20px 40px -12px hsl(220, 20%, 2%, 0.5);
+    --shadow-float: 0 35px 60px -12px hsl(280, 100%, 70%, 0.4);
+    
+    --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-spring: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    --transition-bounce: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
     --sidebar-background: 0 0% 98%;
 
@@ -122,77 +116,245 @@
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
-    @apply bg-background text-foreground font-['Poppins'];
-    background: var(--gradient-hero);
-    min-height: 100vh;
+    @apply bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
+    background: var(--gradient-bg);
+    color: hsl(var(--foreground));
+    font-feature-settings: "rlig" 1, "calt" 1;
+    overflow-x: hidden;
+  }
+
+  /* Typography */
+  .font-display {
+    font-family: 'Playfair Display', serif;
+  }
+
+  .font-body {
+    font-family: 'Inter', sans-serif;
   }
 
   /* Custom scrollbar */
   ::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
   }
 
   ::-webkit-scrollbar-track {
-    background: hsl(240 10% 6%);
+    background: hsl(var(--background));
   }
 
   ::-webkit-scrollbar-thumb {
-    background: hsl(var(--primary));
-    border-radius: 4px;
+    background: var(--gradient-primary);
+    border-radius: 3px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: hsl(var(--primary-glow));
+    background: hsl(var(--primary)/0.8);
   }
 }
 
 @layer components {
-  /* Hero Button Variants */
+  /* Enhanced Button Variants */
   .btn-hero {
-    @apply inline-flex items-center justify-center rounded-lg text-sm font-medium transition-all duration-300;
-    @apply px-6 py-3 bg-primary text-primary-foreground hover:scale-105 transform;
+    @apply inline-flex items-center justify-center rounded-lg text-sm font-medium relative overflow-hidden;
+    @apply px-6 py-3 bg-primary text-primary-foreground;
     background: var(--gradient-primary);
+    border: 1px solid hsl(var(--primary)/0.3);
     box-shadow: var(--shadow-elegant);
+    transition: var(--transition-spring);
+  }
+
+  .btn-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, hsl(var(--primary-glow)/0.3), transparent);
+    transition: var(--transition-smooth);
+  }
+
+  .btn-hero:hover::before {
+    left: 100%;
   }
 
   .btn-hero:hover {
-    box-shadow: var(--shadow-glow);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: var(--shadow-float);
+    border-color: hsl(var(--primary)/0.6);
   }
 
-  /* Card Variants */
+  /* Enhanced Card Variants */
   .card-glass {
     background: var(--gradient-card);
     border: 1px solid hsl(var(--border));
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(20px);
     box-shadow: var(--shadow-card);
+    transition: var(--transition-smooth);
+    position: relative;
+    overflow: hidden;
   }
 
-  /* Text Gradient */
+  .card-glass::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--gradient-primary);
+    opacity: 0;
+    transition: var(--transition-smooth);
+  }
+
+  .card-glass:hover::before {
+    opacity: 1;
+  }
+
+  /* Enhanced Text Gradient */
   .text-gradient {
     background: var(--gradient-primary);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    animation: gradient-shift 3s ease-in-out infinite;
   }
 
-  /* Hover animations */
+  /* Enhanced Hover Effects */
   .hover-lift {
-    transition: var(--transition-smooth);
+    transition: var(--transition-spring);
   }
 
   .hover-lift:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--shadow-glow);
+    transform: translateY(-12px) scale(1.02);
+    box-shadow: var(--shadow-float);
   }
 
-  /* Floating animation */
+  /* Skill Tags */
+  .skill-tag {
+    background: var(--gradient-card);
+    border: 1px solid hsl(var(--primary)/0.2);
+    transition: var(--transition-smooth);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .skill-tag::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--gradient-primary);
+    opacity: 0.1;
+    transition: var(--transition-smooth);
+  }
+
+  .skill-tag:hover::before {
+    left: 0;
+  }
+
+  .skill-tag:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow);
+    border-color: hsl(var(--primary)/0.4);
+  }
+
+  /* Enhanced Animations */
   .animate-float {
     animation: float 6s ease-in-out infinite;
   }
 
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 0.8s ease-out forwards;
+  }
+
+  .animate-scale-in {
+    animation: scale-in 0.6s ease-out forwards;
+  }
+
+  .typewriter {
+    overflow: hidden;
+    border-right: 3px solid hsl(var(--primary));
+    white-space: nowrap;
+    animation: typewriter 3s steps(40, end), blink-caret 0.75s step-end infinite;
+  }
+
+  /* Keyframes */
   @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-20px); }
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+
+  @keyframes gradient-shift {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: var(--shadow-elegant);
+    }
+    50% {
+      box-shadow: var(--shadow-glow);
+    }
+  }
+
+  @keyframes typewriter {
+    from {
+      width: 0;
+    }
+    to {
+      width: 100%;
+    }
+  }
+
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes scale-in {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes blink-caret {
+    from, to {
+      border-color: transparent;
+    }
+    50% {
+      border-color: hsl(var(--primary));
+    }
   }
 }

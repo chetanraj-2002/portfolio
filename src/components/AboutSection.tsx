@@ -52,11 +52,12 @@ const AboutSection = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-3">
                 {skills.map((skill, index) => (
                   <span
                     key={index}
-                    className="px-3 py-1 text-sm bg-primary/10 text-primary rounded-full border border-primary/20"
+                    className="skill-tag px-4 py-2 text-sm font-medium text-primary rounded-full"
+                    style={{ animationDelay: `${index * 100}ms` }}
                   >
                     {skill}
                   </span>

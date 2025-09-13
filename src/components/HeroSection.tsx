@@ -1,8 +1,26 @@
-import { Github, Linkedin, Mail, Download } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Github, Linkedin, Mail, Download, Code, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import profileImage from '@/assets/profile-image.jpg';
 
 const HeroSection = () => {
+  const [text, setText] = useState('');
+  const fullText = 'Creative Developer';
+  
+  useEffect(() => {
+    let index = 0;
+    const timer = setInterval(() => {
+      if (index < fullText.length) {
+        setText(fullText.slice(0, index + 1));
+        index++;
+      } else {
+        clearInterval(timer);
+      }
+    }, 100);
+    
+    return () => clearInterval(timer);
+  }, []);
+
   const socialLinks = [
     { icon: Github, href: 'https://github.com', label: 'GitHub' },
     { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
@@ -10,18 +28,35 @@ const HeroSection = () => {
   ];
 
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center pt-20">
-      <div className="container mx-auto px-6">
+    <section id="home" className="min-h-screen flex items-center justify-center pt-20 relative overflow-hidden">
+      {/* Animated background elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-primary/10 rounded-full mix-blend-multiply filter blur-xl animate-float opacity-70"></div>
+        <div className="absolute top-3/4 right-1/4 w-72 h-72 bg-accent/10 rounded-full mix-blend-multiply filter blur-xl animate-float opacity-70" style={{ animationDelay: '-2s' }}></div>
+        <div className="absolute top-1/2 left-1/2 w-72 h-72 bg-primary/5 rounded-full mix-blend-multiply filter blur-xl animate-float opacity-70" style={{ animationDelay: '-4s' }}></div>
+      </div>
+
+      <div className="container mx-auto px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Content */}
-          <div className="space-y-8">
-            <div className="space-y-4">
-              <h3 className="text-xl text-muted-foreground">Hello, I am</h3>
-              <h1 className="text-5xl lg:text-7xl font-bold text-gradient">
+          <div className="space-y-8 animate-fade-in-up">
+            <div className="space-y-6">
+              <div className="flex items-center space-x-2 text-primary">
+                <Sparkles className="w-5 h-5" />
+                <span className="text-sm font-medium tracking-wide uppercase">Hello, I am</span>
+              </div>
+              
+              <h1 className="text-5xl lg:text-7xl font-display font-bold text-gradient leading-tight">
                 Your Name
               </h1>
-              <p className="text-xl text-muted-foreground max-w-lg">
-                Elevating Possibilities Through Code: Bridging Academic Excellence with a Passion for Innovation.
+              
+              <div className="text-2xl lg:text-3xl font-medium text-muted-foreground min-h-[40px]">
+                <span className="typewriter">{text}</span>
+              </div>
+              
+              <p className="text-lg text-muted-foreground max-w-lg leading-relaxed">
+                Crafting elegant digital experiences through innovative design and cutting-edge technology. 
+                Passionate about creating solutions that make a difference.
               </p>
             </div>
 
@@ -35,40 +70,53 @@ const HeroSection = () => {
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-3 rounded-lg bg-card border border-border hover-lift transition-all duration-300"
+                    className="group p-4 rounded-xl card-glass hover-lift border border-border/50 backdrop-blur-sm"
                     aria-label={social.label}
                   >
-                    <Icon className="w-6 h-6" />
+                    <Icon className="w-5 h-5 group-hover:text-primary transition-colors" />
                   </a>
                 );
               })}
             </div>
 
-            {/* CTA Button */}
-            <div>
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4">
               <Button className="btn-hero group">
                 <Download className="w-4 h-4 mr-2 group-hover:animate-bounce" />
                 Download Resume
+              </Button>
+              <Button variant="outline" className="group border-primary/20 hover:border-primary/40">
+                <Code className="w-4 h-4 mr-2 group-hover:rotate-12 transition-transform" />
+                View Projects
               </Button>
             </div>
           </div>
 
           {/* Profile Image */}
-          <div className="flex justify-center lg:justify-end">
+          <div className="flex justify-center lg:justify-end animate-scale-in">
             <div className="relative">
-              <div className="w-80 h-80 rounded-full overflow-hidden card-glass animate-float">
+              {/* Glow effect */}
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary to-accent opacity-75 blur-2xl animate-pulse-glow"></div>
+              
+              {/* Main image container */}
+              <div className="relative w-80 h-80 rounded-full overflow-hidden card-glass animate-float border-2 border-primary/20">
                 <img
                   src={profileImage}
                   alt="Profile"
                   className="w-full h-full object-cover"
                 />
+                <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-transparent"></div>
               </div>
+              
               {/* Floating elements */}
-              <div className="absolute -top-4 -right-4 w-16 h-16 bg-primary rounded-full flex items-center justify-center animate-pulse">
-                <span className="text-2xl">💻</span>
+              <div className="absolute -top-6 -right-6 w-20 h-20 rounded-full card-glass border border-primary/30 flex items-center justify-center animate-pulse-glow">
+                <span className="text-3xl">💻</span>
               </div>
-              <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-accent rounded-full flex items-center justify-center animate-bounce">
-                <span className="text-lg">🚀</span>
+              <div className="absolute -bottom-6 -left-6 w-16 h-16 rounded-full card-glass border border-accent/30 flex items-center justify-center animate-float" style={{ animationDelay: '-1s' }}>
+                <span className="text-2xl">🚀</span>
+              </div>
+              <div className="absolute top-1/2 -left-8 w-12 h-12 rounded-full card-glass border border-primary/20 flex items-center justify-center animate-float" style={{ animationDelay: '-3s' }}>
+                <span className="text-lg">✨</span>
               </div>
             </div>
           </div>
