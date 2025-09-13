@@ -14,16 +14,184 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      contact_messages: {
+        Row: {
+          created_at: string | null
+          email: string
+          first_name: string
+          id: string
+          last_name: string
+          message: string
+          responded_at: string | null
+          status: Database["public"]["Enums"]["contact_status"] | null
+          subject: string
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          first_name: string
+          id?: string
+          last_name: string
+          message: string
+          responded_at?: string | null
+          status?: Database["public"]["Enums"]["contact_status"] | null
+          subject: string
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          first_name?: string
+          id?: string
+          last_name?: string
+          message?: string
+          responded_at?: string | null
+          status?: Database["public"]["Enums"]["contact_status"] | null
+          subject?: string
+        }
+        Relationships: []
+      }
+      payment_transactions: {
+        Row: {
+          amount: number
+          completed_at: string | null
+          created_at: string | null
+          currency: string | null
+          customer_email: string
+          customer_name: string | null
+          id: string
+          service_description: string | null
+          service_type: string
+          status: string
+          stripe_payment_intent_id: string | null
+        }
+        Insert: {
+          amount: number
+          completed_at?: string | null
+          created_at?: string | null
+          currency?: string | null
+          customer_email: string
+          customer_name?: string | null
+          id?: string
+          service_description?: string | null
+          service_type: string
+          status: string
+          stripe_payment_intent_id?: string | null
+        }
+        Update: {
+          amount?: number
+          completed_at?: string | null
+          created_at?: string | null
+          currency?: string | null
+          customer_email?: string
+          customer_name?: string | null
+          id?: string
+          service_description?: string | null
+          service_type?: string
+          status?: string
+          stripe_payment_intent_id?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string | null
+          email: string | null
+          full_name: string | null
+          id: string
+          role: Database["public"]["Enums"]["user_role"] | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string | null
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["user_role"] | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string | null
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["user_role"] | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      projects: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          demo_link: string | null
+          description: string
+          id: string
+          image_url: string | null
+          published_at: string | null
+          repo_link: string | null
+          status: Database["public"]["Enums"]["project_status"] | null
+          technologies: string[] | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          demo_link?: string | null
+          description: string
+          id?: string
+          image_url?: string | null
+          published_at?: string | null
+          repo_link?: string | null
+          status?: Database["public"]["Enums"]["project_status"] | null
+          technologies?: string[] | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          demo_link?: string | null
+          description?: string
+          id?: string
+          image_url?: string | null
+          published_at?: string | null
+          repo_link?: string | null
+          status?: Database["public"]["Enums"]["project_status"] | null
+          technologies?: string[] | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "projects_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_admin: {
+        Args: { user_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      contact_status: "unread" | "read" | "responded"
+      project_status: "draft" | "published"
+      user_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +318,10 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      contact_status: ["unread", "read", "responded"],
+      project_status: ["draft", "published"],
+      user_role: ["admin", "user"],
+    },
   },
 } as const
