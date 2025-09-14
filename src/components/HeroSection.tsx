@@ -22,9 +22,9 @@ const HeroSection = () => {
   }, []);
 
   const socialLinks = [
-    { icon: Github, href: 'https://github.com', label: 'GitHub' },
-    { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
-    { icon: Mail, href: 'mailto:your.email@example.com', label: 'Email' }
+    { icon: Github, href: 'https://github.com/chetanraj-2002', label: 'GitHub' },
+    { icon: Linkedin, href: 'https://www.linkedin.com/in/chetanraj-jakanur-1425451b4/', label: 'LinkedIn' },
+    { icon: Mail, href: 'mailto:chetanrajjakanur2002@gmail.com', label: 'Email' }
   ];
 
   return (
@@ -47,7 +47,7 @@ const HeroSection = () => {
               </div>
               
               <h1 className="text-5xl lg:text-7xl font-display font-bold text-gradient leading-tight">
-                Your Name
+                CHETANRAJ JAKANUR
               </h1>
               
               <div className="text-2xl lg:text-3xl font-medium text-muted-foreground min-h-[40px]">
@@ -55,8 +55,7 @@ const HeroSection = () => {
               </div>
               
               <p className="text-lg text-muted-foreground max-w-lg leading-relaxed">
-                Crafting elegant digital experiences through innovative design and cutting-edge technology. 
-                Passionate about creating solutions that make a difference.
+                Full Stack Developer — Cloud Engineer — Database Engineer. Proficient in building dynamic web applications using MERN stack, Flask, and Flutter with hands-on experience in AI/ML models and cloud-based services.
               </p>
             </div>
 
@@ -81,11 +80,28 @@ const HeroSection = () => {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button className="btn-hero group">
+              <Button 
+                className="btn-hero group"
+                onClick={() => {
+                  const link = document.createElement('a');
+                  link.href = '/ChetanrajJakanur_Resume.pdf';
+                  link.download = 'ChetanrajJakanur_Resume.pdf';
+                  link.click();
+                }}
+              >
                 <Download className="w-4 h-4 mr-2 group-hover:animate-bounce" />
                 Download Resume
               </Button>
-              <Button variant="outline" className="group border-primary/20 hover:border-primary/40">
+              <Button 
+                variant="outline" 
+                className="group border-primary/20 hover:border-primary/40"
+                onClick={() => {
+                  const projectsSection = document.getElementById('projects');
+                  if (projectsSection) {
+                    projectsSection.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+              >
                 <Code className="w-4 h-4 mr-2 group-hover:rotate-12 transition-transform" />
                 View Projects
               </Button>
@@ -102,7 +118,7 @@ const HeroSection = () => {
               <div className="relative w-80 h-80 rounded-full overflow-hidden card-glass animate-float border-2 border-primary/20">
                 <img
                   src={profileImage}
-                  alt="Profile"
+                  alt="CHETANRAJ JAKANUR - Full Stack Developer"
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-transparent"></div>

@@ -7,49 +7,49 @@
 
 @layer base {
   :root {
-    /* Elegant Modern Theme */
-    --background: 220 20% 4%;
-    --foreground: 220 12% 95%;
+    /* Sleek Dark Theme with Purple Accents */
+    --background: 0 0% 3%;
+    --foreground: 0 0% 98%;
     
-    --card: 220 20% 6%;
-    --card-foreground: 220 12% 95%;
+    --card: 0 0% 6%;
+    --card-foreground: 0 0% 98%;
     
-    --popover: 220 20% 6%;
-    --popover-foreground: 220 12% 95%;
+    --popover: 0 0% 4%;
+    --popover-foreground: 0 0% 98%;
     
-    --primary: 280 100% 70%;
-    --primary-foreground: 220 20% 4%;
-    --primary-glow: 285 100% 80%;
+    --primary: 262 70% 65%;
+    --primary-foreground: 0 0% 98%;
+    --primary-glow: 267 75% 75%;
     
-    --secondary: 220 20% 10%;
-    --secondary-foreground: 220 12% 95%;
+    --secondary: 0 0% 8%;
+    --secondary-foreground: 0 0% 98%;
     
-    --muted: 220 20% 10%;
-    --muted-foreground: 220 12% 65%;
+    --muted: 0 0% 8%;
+    --muted-foreground: 0 0% 65%;
     
-    --accent: 260 90% 65%;
-    --accent-foreground: 220 20% 4%;
+    --accent: 280 70% 70%;
+    --accent-foreground: 0 0% 98%;
     
     --destructive: 0 65% 55%;
-    --destructive-foreground: 0 85% 97%;
+    --destructive-foreground: 0 0% 98%;
     
-    --border: 220 20% 12%;
-    --input: 220 20% 8%;
-    --ring: 280 100% 70%;
+    --border: 0 0% 12%;
+    --input: 0 0% 8%;
+    --ring: 262 70% 65%;
     
     --radius: 0.75rem;
     
-    /* Elegant gradients and effects */
-    --gradient-primary: linear-gradient(135deg, hsl(280, 100%, 70%), hsl(260, 90%, 65%));
-    --gradient-secondary: linear-gradient(135deg, hsl(220, 20%, 6%), hsl(220, 20%, 10%));
-    --gradient-bg: radial-gradient(ellipse at top, hsl(280, 100%, 70%, 0.1) 0%, hsl(220, 20%, 4%) 50%);
-    --gradient-card: linear-gradient(135deg, hsl(220, 20%, 6%, 0.8), hsl(220, 20%, 8%, 0.9));
-    --gradient-hero: linear-gradient(135deg, hsl(280, 100%, 70%, 0.15) 0%, hsl(260, 90%, 65%, 0.1) 100%);
+    /* Sleek Dark gradients and effects */
+    --gradient-primary: linear-gradient(135deg, hsl(262, 70%, 65%), hsl(280, 70%, 70%));
+    --gradient-secondary: linear-gradient(135deg, hsl(0, 0%, 6%), hsl(0, 0%, 8%));
+    --gradient-bg: radial-gradient(ellipse at top, hsl(262, 70%, 65%, 0.06) 0%, hsl(0, 0%, 3%) 50%);
+    --gradient-card: linear-gradient(135deg, hsl(0, 0%, 6%, 0.9), hsl(0, 0%, 8%, 0.95));
+    --gradient-hero: linear-gradient(135deg, hsl(262, 70%, 65%, 0.08) 0%, hsl(280, 70%, 70%, 0.04) 100%);
     
-    --shadow-elegant: 0 25px 50px -12px hsl(280, 100%, 70%, 0.25);
-    --shadow-glow: 0 0 50px hsl(280, 100%, 70%, 0.3);
-    --shadow-card: 0 20px 40px -12px hsl(220, 20%, 2%, 0.5);
-    --shadow-float: 0 35px 60px -12px hsl(280, 100%, 70%, 0.4);
+    --shadow-elegant: 0 25px 50px -12px hsl(262, 70%, 65%, 0.2);
+    --shadow-glow: 0 0 50px hsl(262, 70%, 65%, 0.25);
+    --shadow-card: 0 20px 40px -12px hsl(0, 0%, 0%, 0.6);
+    --shadow-float: 0 35px 60px -12px hsl(262, 70%, 65%, 0.3);
     
     --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-spring: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);

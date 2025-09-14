@@ -1,10 +1,15 @@
 import { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Settings, LogOut, User as UserIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { supabase } from '@/integrations/supabase/client';
+import { User } from '@supabase/supabase-js';
+import { useNavigate } from 'react-router-dom';
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -15,13 +20,34 @@ const Navigation = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    // Get initial session
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUser(user);
+    });
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setUser(session?.user ?? null);
+      }
+    );
+
+    return () => subscription.unsubscribe();
+  }, []);
+
   const navLinks = [
     { href: '#home', label: 'Home' },
     { href: '#about', label: 'About' },
     { href: '#projects', label: 'Projects' },
-    { href: '#media', label: 'Media' },
+    { href: '#experience', label: 'Experience' },
     { href: '#contact', label: 'Contact' }
   ];
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    navigate('/');
+  };
 
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
@@ -37,8 +63,8 @@ const Navigation = () => {
     }`}>
       <nav className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
-          <div className="text-2xl font-bold text-gradient">
-            Portfolio.
+          <div className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            CHETANRAJ JAKANUR
           </div>
 
           {/* Desktop Navigation */}
@@ -52,6 +78,42 @@ const Navigation = () => {
                 {link.label}
               </button>
             ))}
+            
+            {/* Admin Controls */}
+            <div className="flex items-center gap-4 ml-8 border-l border-border/50 pl-8">
+              {user ? (
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => navigate('/admin')}
+                    className="flex items-center gap-2"
+                  >
+                    <Settings className="w-4 h-4" />
+                    Admin
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleSignOut}
+                    className="flex items-center gap-2"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    Sign Out
+                  </Button>
+                </div>
+              ) : (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => navigate('/auth')}
+                  className="flex items-center gap-2"
+                >
+                  <UserIcon className="w-4 h-4" />
+                  Admin Login
+                </Button>
+              )}
+            </div>
           </div>
 
           {/* Mobile Menu Button */}

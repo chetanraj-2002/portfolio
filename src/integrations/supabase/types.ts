@@ -14,6 +14,57 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_profiles: {
+        Row: {
+          bio: string | null
+          created_at: string
+          email: string
+          full_name: string
+          github_url: string | null
+          id: string
+          linkedin_url: string | null
+          location: string | null
+          phone: string | null
+          profile_image_url: string | null
+          resume_url: string | null
+          title: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          bio?: string | null
+          created_at?: string
+          email: string
+          full_name: string
+          github_url?: string | null
+          id?: string
+          linkedin_url?: string | null
+          location?: string | null
+          phone?: string | null
+          profile_image_url?: string | null
+          resume_url?: string | null
+          title?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          bio?: string | null
+          created_at?: string
+          email?: string
+          full_name?: string
+          github_url?: string | null
+          id?: string
+          linkedin_url?: string | null
+          location?: string | null
+          phone?: string | null
+          profile_image_url?: string | null
+          resume_url?: string | null
+          title?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       contact_messages: {
         Row: {
           created_at: string | null
@@ -49,6 +100,59 @@ export type Database = {
           subject?: string
         }
         Relationships: []
+      }
+      education: {
+        Row: {
+          admin_id: string
+          created_at: string
+          degree: string
+          description: string | null
+          end_date: string | null
+          field_of_study: string | null
+          grade: string | null
+          id: string
+          institution_name: string
+          order_index: number | null
+          start_date: string
+          updated_at: string
+        }
+        Insert: {
+          admin_id: string
+          created_at?: string
+          degree: string
+          description?: string | null
+          end_date?: string | null
+          field_of_study?: string | null
+          grade?: string | null
+          id?: string
+          institution_name: string
+          order_index?: number | null
+          start_date: string
+          updated_at?: string
+        }
+        Update: {
+          admin_id?: string
+          created_at?: string
+          degree?: string
+          description?: string | null
+          end_date?: string | null
+          field_of_study?: string | null
+          grade?: string | null
+          id?: string
+          institution_name?: string
+          order_index?: number | null
+          start_date?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "education_admin_id_fkey"
+            columns: ["admin_id"]
+            isOneToOne: false
+            referencedRelation: "admin_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       payment_transactions: {
         Row: {
@@ -91,6 +195,68 @@ export type Database = {
           stripe_payment_intent_id?: string | null
         }
         Relationships: []
+      }
+      portfolio_projects: {
+        Row: {
+          admin_id: string
+          created_at: string
+          demo_link: string | null
+          description: string
+          end_date: string | null
+          featured: boolean | null
+          id: string
+          image_url: string | null
+          order_index: number | null
+          repo_link: string | null
+          start_date: string | null
+          status: string | null
+          technologies: string[] | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          admin_id: string
+          created_at?: string
+          demo_link?: string | null
+          description: string
+          end_date?: string | null
+          featured?: boolean | null
+          id?: string
+          image_url?: string | null
+          order_index?: number | null
+          repo_link?: string | null
+          start_date?: string | null
+          status?: string | null
+          technologies?: string[] | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          admin_id?: string
+          created_at?: string
+          demo_link?: string | null
+          description?: string
+          end_date?: string | null
+          featured?: boolean | null
+          id?: string
+          image_url?: string | null
+          order_index?: number | null
+          repo_link?: string | null
+          start_date?: string | null
+          status?: string | null
+          technologies?: string[] | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "portfolio_projects_admin_id_fkey"
+            columns: ["admin_id"]
+            isOneToOne: false
+            referencedRelation: "admin_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -178,12 +344,113 @@ export type Database = {
           },
         ]
       }
+      skills: {
+        Row: {
+          admin_id: string
+          category: string
+          created_at: string
+          id: string
+          order_index: number | null
+          proficiency_level: number | null
+          skill_name: string
+          updated_at: string
+        }
+        Insert: {
+          admin_id: string
+          category: string
+          created_at?: string
+          id?: string
+          order_index?: number | null
+          proficiency_level?: number | null
+          skill_name: string
+          updated_at?: string
+        }
+        Update: {
+          admin_id?: string
+          category?: string
+          created_at?: string
+          id?: string
+          order_index?: number | null
+          proficiency_level?: number | null
+          skill_name?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "skills_admin_id_fkey"
+            columns: ["admin_id"]
+            isOneToOne: false
+            referencedRelation: "admin_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      work_experiences: {
+        Row: {
+          admin_id: string
+          company_name: string
+          created_at: string
+          description: string | null
+          end_date: string | null
+          id: string
+          is_current: boolean | null
+          location: string | null
+          order_index: number | null
+          position: string
+          start_date: string
+          technologies: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          admin_id: string
+          company_name: string
+          created_at?: string
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          is_current?: boolean | null
+          location?: string | null
+          order_index?: number | null
+          position: string
+          start_date: string
+          technologies?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          admin_id?: string
+          company_name?: string
+          created_at?: string
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          is_current?: boolean | null
+          location?: string | null
+          order_index?: number | null
+          position?: string
+          start_date?: string
+          technologies?: string[] | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "work_experiences_admin_id_fkey"
+            columns: ["admin_id"]
+            isOneToOne: false
+            referencedRelation: "admin_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
       is_admin: {
+        Args: { user_id: string }
+        Returns: boolean
+      }
+      is_admin_user: {
         Args: { user_id: string }
         Returns: boolean
       }
