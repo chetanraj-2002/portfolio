@@ -53,18 +53,26 @@ const Auth = () => {
 
 
   const handleSignIn = async () => {
-    setLoading(true);
-    
-    // Validate that this is the admin email
+    if (!formData.email || !formData.password) {
+      toast({
+        title: "Error",
+        description: "Please enter both email and password",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Check if email is the admin email
     if (formData.email !== 'chetanrajjakanur2002@gmail.com') {
       toast({
         title: "Access Denied",
-        description: "This is a private admin portal. Only authorized access is allowed.",
+        description: "This admin portal is restricted to authorized personnel only.",
         variant: "destructive",
       });
-      setLoading(false);
       return;
     }
+
+    setLoading(true);
 
     try {
       const { error } = await supabase.auth.signInWithPassword({
@@ -73,14 +81,51 @@ const Auth = () => {
       });
 
       if (error) {
+        // If user doesn't exist, try to create them first
+        if (error.message.includes('Invalid login credentials') || error.message.includes('Email not confirmed')) {
+          const { setupAdminUser } = await import('@/utils/adminSetup');
+          const setupResult = await setupAdminUser();
+          
+          if (setupResult.success) {
+            // Now try signing in again
+            const { error: signInError } = await supabase.auth.signInWithPassword({
+              email: formData.email,
+              password: formData.password,
+            });
+            
+            if (signInError) {
+              toast({
+                title: "Sign In Failed",
+                description: "Admin account created but sign-in failed. Please try again.",
+                variant: "destructive",
+              });
+            } else {
+              toast({
+                title: "Welcome!",
+                description: "Admin account setup complete. Welcome to your dashboard!",
+              });
+            }
+          } else {
+            toast({
+              title: "Setup Failed",
+              description: "Could not create admin account. Please contact support.",
+              variant: "destructive",
+            });
+          }
+        } else {
+          toast({
+            title: "Sign In Failed",
+            description: error.message,
+            variant: "destructive",
+          });
+        }
+      } else {
         toast({
-          title: "Sign in failed",
-          description: error.message,
-          variant: "destructive",
+          title: "Welcome Back!",
+          description: "Successfully signed in to admin dashboard",
         });
-        return;
       }
-    } catch (err: any) {
+    } catch (err) {
       toast({
         title: "Error",
         description: "An unexpected error occurred",
