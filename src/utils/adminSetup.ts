@@ -5,7 +5,7 @@ export const setupAdminUser = async () => {
   try {
     // Try to sign up the admin user
     const { data, error } = await supabase.auth.signUp({
-      email: 'chetanrajjakanur2002@gmail.com',
+      email: 'ABC@gmail.com',
       password: 'Raja_2002',
       options: {
         emailRedirectTo: `${window.location.origin}/`,
