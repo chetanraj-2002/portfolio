@@ -19,11 +19,14 @@ import {
   Phone,
   MapPin,
   Github,
-  Linkedin
+  Linkedin,
+  Camera,
+  Edit3
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
 const AdminDashboard = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -95,12 +98,12 @@ const AdminDashboard = () => {
         email: 'chetanrajjakanur2002@gmail.com',
         title: 'Full Stack Developer — Cloud Engineer — Database Engineer',
         bio: 'Proficient Full Stack Developer with hands-on experience in building dynamic web applications using MERN stack, Flask, and Flutter. Skilled in integrating AI/ML models, real-time data systems, and cloud-based services to deliver scalable, user-centric solutions.',
-        phone: '+91 7022929504',
-        location: 'Davangere, India',
+        phone: '7022929504',
+        location: 'Bengaluru, Karnataka, India',
         linkedin_url: 'https://www.linkedin.com/in/chetanraj-jakanur-1425451b4/',
         github_url: 'https://github.com/chetanraj-2002',
         resume_url: '/ChetanrajJakanur_Resume.pdf',
-        profile_image_url: '/src/assets/profile-image.jpg'
+        profile_image_url: '/src/assets/chetanraj-profile.jpg'
       };
 
       const { data, error } = await supabase
@@ -242,7 +245,42 @@ const AdminDashboard = () => {
               </CardHeader>
               <CardContent className="space-y-6">
                 {profile && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <>
+                    {/* Profile Photo Section */}
+                    <div className="flex flex-col items-center gap-6 p-6 border border-border/50 rounded-lg bg-card/50">
+                      <div className="relative group">
+                        <Avatar className="w-32 h-32 ring-4 ring-primary/20">
+                          <AvatarImage 
+                            src={profile.profile_image_url} 
+                            alt={profile.full_name}
+                            className="object-cover"
+                          />
+                          <AvatarFallback className="text-2xl font-bold bg-primary/10">
+                            {profile.full_name?.split(' ').map(n => n[0]).join('')}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="absolute inset-0 bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer">
+                          <div className="text-white text-center">
+                            <Camera className="w-6 h-6 mx-auto mb-1" />
+                            <span className="text-xs">Change Photo</span>
+                          </div>
+                        </div>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="absolute -bottom-2 -right-2 rounded-full w-10 h-10 p-0 bg-background border-primary/20 hover:border-primary/40"
+                        >
+                          <Edit3 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                      <div className="text-center">
+                        <h3 className="font-semibold text-lg">{profile.full_name}</h3>
+                        <p className="text-muted-foreground text-sm">{profile.title}</p>
+                      </div>
+                    </div>
+
+                    {/* Profile Form */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <Label htmlFor="full_name">Full Name</Label>
                       <Input
@@ -334,18 +372,19 @@ const AdminDashboard = () => {
                       </div>
                     </div>
                     
-                    <div className="space-y-2 md:col-span-2">
-                      <Label htmlFor="bio">Professional Bio</Label>
-                      <Textarea
-                        id="bio"
-                        value={profile.bio || ''}
-                        onChange={(e) => setProfile({ ...profile, bio: e.target.value })}
-                        onBlur={() => updateProfile({ bio: profile.bio })}
-                        rows={4}
-                        placeholder="Write a brief professional summary..."
-                      />
-                    </div>
-                  </div>
+                     <div className="space-y-2 md:col-span-2">
+                       <Label htmlFor="bio">Professional Bio</Label>
+                       <Textarea
+                         id="bio"
+                         value={profile.bio || ''}
+                         onChange={(e) => setProfile({ ...profile, bio: e.target.value })}
+                         onBlur={() => updateProfile({ bio: profile.bio })}
+                         rows={4}
+                         placeholder="Write a brief professional summary..."
+                       />
+                     </div>
+                   </div>
+                  </>
                 )}
               </CardContent>
             </Card>

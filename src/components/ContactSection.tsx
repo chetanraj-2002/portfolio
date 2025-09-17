@@ -10,19 +10,19 @@ const ContactSection = () => {
     {
       icon: Mail,
       label: 'Email',
-      value: 'your.email@example.com',
-      href: 'mailto:your.email@example.com'
+      value: 'chetanrajjakanur2002@gmail.com',
+      href: 'mailto:chetanrajjakanur2002@gmail.com'
     },
     {
       icon: Phone,
       label: 'Phone',
-      value: '+1 (555) 123-4567',
-      href: 'tel:+15551234567'
+      value: '7022929504',
+      href: 'tel:7022929504'
     },
     {
       icon: MapPin,
       label: 'Location',
-      value: 'Your City, Country',
+      value: 'Bengaluru, Karnataka, India',
       href: '#'
     }
   ];
