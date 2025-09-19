@@ -5,8 +5,8 @@ export const setupAdminUser = async () => {
   try {
     // Try to sign up the admin user
     const { data, error } = await supabase.auth.signUp({
-      email: 'ABC@gmail.com',
-      password: 'Raja_2002',
+      email: 'admin.portfolio.2024@tempmail.dev',
+      password: 'TempAdmin$2024!',
       options: {
         emailRedirectTo: `${window.location.origin}/`,
         data: {

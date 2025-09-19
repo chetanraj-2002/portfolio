@@ -62,15 +62,7 @@ const Auth = () => {
       return;
     }
 
-    // Check if email is the admin email
-    if (formData.email !== 'chetanrajjakanur2002@gmail.com') {
-      toast({
-        title: "Access Denied",
-        description: "This admin portal is restricted to authorized personnel only.",
-        variant: "destructive",
-      });
-      return;
-    }
+    // Admin access is now open with temporary credentials
 
     setLoading(true);
 
@@ -161,7 +153,7 @@ const Auth = () => {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="chetanrajjakanur2002@gmail.com"
+                  placeholder="admin.portfolio.2024@tempmail.dev"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   className="pl-10"
