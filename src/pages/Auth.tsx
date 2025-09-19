@@ -51,7 +51,6 @@ const Auth = () => {
     return () => subscription.unsubscribe();
   }, [navigate, toast]);
 
-
   const handleSignIn = async () => {
     if (!formData.email || !formData.password) {
       toast({
@@ -62,58 +61,41 @@ const Auth = () => {
       return;
     }
 
-    // Admin access is now open with temporary credentials
-
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      // First try to sign in directly
+      let { error } = await supabase.auth.signInWithPassword({
         email: formData.email,
         password: formData.password,
       });
 
+      // If sign in fails due to credentials or email confirmation, try admin setup
+      if (error && (error.message.includes('Invalid login credentials') || 
+                   error.message.includes('Email not confirmed'))) {
+        
+        const { setupAdminUser } = await import('@/utils/adminSetup');
+        await setupAdminUser();
+        
+        // Retry sign in after setup
+        const { error: retryError } = await supabase.auth.signInWithPassword({
+          email: formData.email,
+          password: formData.password,
+        });
+        
+        error = retryError;
+      }
+
+      // Handle final result
       if (error) {
-        // If user doesn't exist, try to create them first
-        if (error.message.includes('Invalid login credentials') || error.message.includes('Email not confirmed')) {
-          const { setupAdminUser } = await import('@/utils/adminSetup');
-          const setupResult = await setupAdminUser();
-          
-          if (setupResult.success) {
-            // Now try signing in again
-            const { error: signInError } = await supabase.auth.signInWithPassword({
-              email: formData.email,
-              password: formData.password,
-            });
-            
-            if (signInError) {
-              toast({
-                title: "Sign In Failed",
-                description: "Admin account created but sign-in failed. Please try again.",
-                variant: "destructive",
-              });
-            } else {
-              toast({
-                title: "Welcome!",
-                description: "Admin account setup complete. Welcome to your dashboard!",
-              });
-            }
-          } else {
-            toast({
-              title: "Setup Failed",
-              description: "Could not create admin account. Please contact support.",
-              variant: "destructive",
-            });
-          }
-        } else {
-          toast({
-            title: "Sign In Failed",
-            description: error.message,
-            variant: "destructive",
-          });
-        }
+        toast({
+          title: "Sign In Failed",
+          description: error.message,
+          variant: "destructive",
+        });
       } else {
         toast({
-          title: "Welcome Back!",
+          title: "Welcome!",
           description: "Successfully signed in to admin dashboard",
         });
       }
