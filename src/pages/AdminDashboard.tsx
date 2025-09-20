@@ -6,6 +6,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { User, Session } from '@supabase/supabase-js';
+import { ExperienceManager } from '@/components/admin/ExperienceManager';
+import { ProjectsManager } from '@/components/admin/ProjectsManager';
+import { EducationManager } from '@/components/admin/EducationManager';
+import { TestimonialsManager } from '@/components/admin/TestimonialsManager';
+import { MediaManager } from '@/components/admin/MediaManager';
+import { ContactMessagesManager } from '@/components/admin/ContactMessagesManager';
 import { 
   Settings, 
   FileText, 
@@ -207,27 +213,15 @@ const AdminDashboard = () => {
         </div>
 
         <Tabs defaultValue="profile" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="profile" className="flex items-center gap-2">
-              <UserIcon className="w-4 h-4" />
-              Profile
-            </TabsTrigger>
-            <TabsTrigger value="experience" className="flex items-center gap-2">
-              <Briefcase className="w-4 h-4" />
-              Experience
-            </TabsTrigger>
-            <TabsTrigger value="projects" className="flex items-center gap-2">
-              <Code className="w-4 h-4" />
-              Projects
-            </TabsTrigger>
-            <TabsTrigger value="education" className="flex items-center gap-2">
-              <GraduationCap className="w-4 h-4" />
-              Education
-            </TabsTrigger>
-            <TabsTrigger value="resume" className="flex items-center gap-2">
-              <FileText className="w-4 h-4" />
-              Resume
-            </TabsTrigger>
+          <TabsList className="grid w-full grid-cols-8">
+            <TabsTrigger value="profile">Profile</TabsTrigger>
+            <TabsTrigger value="experience">Experience</TabsTrigger>
+            <TabsTrigger value="projects">Projects</TabsTrigger>
+            <TabsTrigger value="education">Education</TabsTrigger>
+            <TabsTrigger value="testimonials">Testimonials</TabsTrigger>
+            <TabsTrigger value="media">Media</TabsTrigger>
+            <TabsTrigger value="contact">Messages</TabsTrigger>
+            <TabsTrigger value="resume">Resume</TabsTrigger>
           </TabsList>
 
           <TabsContent value="profile" className="space-y-6">
@@ -372,53 +366,86 @@ const AdminDashboard = () => {
             </Card>
           </TabsContent>
 
-          <TabsContent value="experience">
+          <TabsContent value="experience" className="space-y-6">
             <Card>
               <CardHeader>
                 <CardTitle>Work Experience</CardTitle>
                 <CardDescription>
-                  Manage your professional experience and career history
+                  Manage your work experience and career history
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="text-center py-8">
-                  <Briefcase className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                  <p className="text-muted-foreground">Experience management coming soon...</p>
-                </div>
+                <ExperienceManager />
               </CardContent>
             </Card>
           </TabsContent>
 
-          <TabsContent value="projects">
+          <TabsContent value="projects" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Projects</CardTitle>
+                <CardTitle>Portfolio Projects</CardTitle>
                 <CardDescription>
-                  Showcase your portfolio projects and work samples
+                  Showcase your best work and projects
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="text-center py-8">
-                  <Code className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                  <p className="text-muted-foreground">Project management coming soon...</p>
-                </div>
+                <ProjectsManager />
               </CardContent>
             </Card>
           </TabsContent>
 
-          <TabsContent value="education">
+          <TabsContent value="education" className="space-y-6">
             <Card>
               <CardHeader>
                 <CardTitle>Education</CardTitle>
                 <CardDescription>
-                  Manage your educational background and qualifications
+                  Add your educational background and qualifications
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="text-center py-8">
-                  <GraduationCap className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                  <p className="text-muted-foreground">Education management coming soon...</p>
-                </div>
+                <EducationManager />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="testimonials" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Client Testimonials</CardTitle>
+                <CardDescription>
+                  Manage client feedback and testimonials
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <TestimonialsManager />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="media" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Media Gallery</CardTitle>
+                <CardDescription>
+                  Manage portfolio images and media content
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <MediaManager />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="contact" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Contact Messages</CardTitle>
+                <CardDescription>
+                  View and manage contact form submissions
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ContactMessagesManager />
               </CardContent>
             </Card>
           </TabsContent>

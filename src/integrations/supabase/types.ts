@@ -154,6 +154,51 @@ export type Database = {
           },
         ]
       }
+      media_gallery: {
+        Row: {
+          admin_id: string
+          created_at: string
+          description: string | null
+          featured: boolean | null
+          id: string
+          media_type: string
+          media_url: string
+          order_index: number | null
+          tags: string[] | null
+          thumbnail_url: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          admin_id: string
+          created_at?: string
+          description?: string | null
+          featured?: boolean | null
+          id?: string
+          media_type: string
+          media_url: string
+          order_index?: number | null
+          tags?: string[] | null
+          thumbnail_url?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          admin_id?: string
+          created_at?: string
+          description?: string | null
+          featured?: boolean | null
+          id?: string
+          media_type?: string
+          media_url?: string
+          order_index?: number | null
+          tags?: string[] | null
+          thumbnail_url?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       payment_transactions: {
         Row: {
           amount: number
@@ -384,6 +429,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      testimonials: {
+        Row: {
+          admin_id: string
+          client_company: string | null
+          client_image_url: string | null
+          client_name: string
+          client_title: string | null
+          created_at: string
+          featured: boolean | null
+          id: string
+          order_index: number | null
+          rating: number | null
+          testimonial_text: string
+          updated_at: string
+        }
+        Insert: {
+          admin_id: string
+          client_company?: string | null
+          client_image_url?: string | null
+          client_name: string
+          client_title?: string | null
+          created_at?: string
+          featured?: boolean | null
+          id?: string
+          order_index?: number | null
+          rating?: number | null
+          testimonial_text: string
+          updated_at?: string
+        }
+        Update: {
+          admin_id?: string
+          client_company?: string | null
+          client_image_url?: string | null
+          client_name?: string
+          client_title?: string | null
+          created_at?: string
+          featured?: boolean | null
+          id?: string
+          order_index?: number | null
+          rating?: number | null
+          testimonial_text?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       work_experiences: {
         Row: {
