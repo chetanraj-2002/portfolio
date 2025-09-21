@@ -219,10 +219,10 @@ const AdminDashboard = () => {
             <TabsTrigger value="experience">Experience</TabsTrigger>
             <TabsTrigger value="projects">Projects</TabsTrigger>
             <TabsTrigger value="education">Education</TabsTrigger>
+            <TabsTrigger value="skills">Skills</TabsTrigger>
             <TabsTrigger value="testimonials">Testimonials</TabsTrigger>
             <TabsTrigger value="media">Media</TabsTrigger>
             <TabsTrigger value="contact">Messages</TabsTrigger>
-            <TabsTrigger value="resume">Resume</TabsTrigger>
           </TabsList>
 
           <TabsContent value="profile" className="space-y-6">
@@ -405,6 +405,20 @@ const AdminDashboard = () => {
               </CardHeader>
               <CardContent>
                 <EducationManager />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="skills">
+            <Card>
+              <CardHeader>
+                <CardTitle>Skills</CardTitle>
+                <CardDescription>
+                  Manage your technical skills and proficiency levels
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <SkillsManager />
               </CardContent>
             </Card>
           </TabsContent>

@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { X } from 'lucide-react';
+import { FileUpload } from '@/components/FileUpload';
 
 interface Field {
   name: string;
@@ -81,13 +82,10 @@ export const AdminForm = ({
       
       case 'file':
         return (
-          <Input
-            type="file"
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              if (file) onChange(field.name, file);
-            }}
-            accept="image/*"
+          <FileUpload
+            onFileUploaded={(url) => onChange(field.name, url)}
+            currentFile={value}
+            placeholder="Upload file"
           />
         );
       

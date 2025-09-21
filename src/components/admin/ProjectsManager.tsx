@@ -213,7 +213,7 @@ export const ProjectsManager = () => {
   const formFields = [
     { name: 'title', label: 'Project Title', type: 'text' as const, required: true },
     { name: 'description', label: 'Description', type: 'textarea' as const, required: true },
-    { name: 'image_url', label: 'Image URL', type: 'url' as const },
+    { name: 'image_url', label: 'Project Image', type: 'file' as const },
     { name: 'demo_link', label: 'Demo Link', type: 'url' as const },
     { name: 'repo_link', label: 'Repository Link', type: 'url' as const },
     { name: 'technologies', label: 'Technologies (comma-separated)', type: 'text' as const },

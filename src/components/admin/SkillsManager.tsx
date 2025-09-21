@@ -204,11 +204,11 @@ export const SkillsManager = () => {
       label: 'Proficiency Level', 
       type: 'select' as const,
       options: [
-        { value: 1, label: 'Beginner' },
-        { value: 2, label: 'Intermediate' },
-        { value: 3, label: 'Advanced' },
-        { value: 4, label: 'Expert' },
-        { value: 5, label: 'Master' }
+        { value: '1', label: 'Beginner' },
+        { value: '2', label: 'Intermediate' },
+        { value: '3', label: 'Advanced' },
+        { value: '4', label: 'Expert' },
+        { value: '5', label: 'Master' }
       ]
     },
     { name: 'order_index', label: 'Display Order', type: 'number' as const }
