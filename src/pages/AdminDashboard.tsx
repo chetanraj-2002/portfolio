@@ -12,6 +12,7 @@ import { EducationManager } from '@/components/admin/EducationManager';
 import { TestimonialsManager } from '@/components/admin/TestimonialsManager';
 import { MediaManager } from '@/components/admin/MediaManager';
 import { ContactMessagesManager } from '@/components/admin/ContactMessagesManager';
+import { SkillsManager } from '@/components/admin/SkillsManager';
 import { 
   Settings, 
   FileText, 

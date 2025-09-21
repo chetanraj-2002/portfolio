@@ -200,7 +200,7 @@ export const MediaManager = () => {
   const formFields = [
     { name: 'title', label: 'Title', type: 'text' as const, required: true },
     { name: 'description', label: 'Description', type: 'textarea' as const },
-    { name: 'media_url', label: 'Media URL', type: 'url' as const, required: true },
+    { name: 'media_url', label: 'Media File', type: 'file' as const, required: true },
     { 
       name: 'media_type', 
       label: 'Media Type', 
@@ -211,7 +211,7 @@ export const MediaManager = () => {
         { value: 'audio', label: 'Audio' }
       ]
     },
-    { name: 'thumbnail_url', label: 'Thumbnail URL', type: 'url' as const },
+    { name: 'thumbnail_url', label: 'Thumbnail Image', type: 'file' as const },
     { name: 'tags', label: 'Tags (comma-separated)', type: 'text' as const },
     { name: 'featured', label: 'Featured Media', type: 'switch' as const },
     { name: 'order_index', label: 'Display Order', type: 'number' as const }
