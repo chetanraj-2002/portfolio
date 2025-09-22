@@ -33,14 +33,25 @@ export const SkillsManager = () => {
   }, []);
 
   const fetchAdminProfile = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (user) {
-      const { data } = await supabase
-        .from('admin_profiles')
-        .select('*')
-        .eq('user_id', user.id)
-        .single();
-      setAdminProfile(data);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data, error } = await supabase
+          .from('admin_profiles')
+          .select('*')
+          .eq('user_id', user.id)
+          .maybeSingle();
+        
+        if (error) throw error;
+        setAdminProfile(data);
+      }
+    } catch (error) {
+      console.error('Error fetching admin profile:', error);
+      toast({
+        title: "Error",
+        description: "Failed to fetch admin profile",
+        variant: "destructive",
+      });
     }
   };
 

@@ -1,11 +1,24 @@
+import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 const ContactSection = () => {
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    subject: '',
+    message: ''
+  });
+  const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
+
   const contactInfo = [
     {
       icon: Mail,
@@ -27,10 +40,59 @@ const ContactSection = () => {
     }
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    console.log('Form submitted');
+    setLoading(true);
+
+    try {
+      // Save to database
+      const { error: dbError } = await supabase
+        .from('contact_messages')
+        .insert({
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          email: formData.email,
+          subject: formData.subject,
+          message: formData.message,
+          status: 'unread'
+        });
+
+      if (dbError) throw dbError;
+
+      // Send email
+      const { error: emailError } = await supabase.functions.invoke('send-contact-email', {
+        body: formData
+      });
+
+      if (emailError) {
+        console.error('Email sending failed:', emailError);
+        // Don't throw error, message was still saved to database
+      }
+
+      toast({
+        title: "Message sent successfully!",
+        description: "Thank you for your message. I'll get back to you soon.",
+      });
+
+      // Reset form
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        subject: '',
+        message: ''
+      });
+
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -91,16 +153,22 @@ const ContactSection = () => {
                     <Label htmlFor="firstName">First Name</Label>
                     <Input
                       id="firstName"
+                      value={formData.firstName}
+                      onChange={(e) => setFormData(prev => ({ ...prev, firstName: e.target.value }))}
                       placeholder="John"
                       className="bg-background/50"
+                      required
                     />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="lastName">Last Name</Label>
                     <Input
                       id="lastName"
+                      value={formData.lastName}
+                      onChange={(e) => setFormData(prev => ({ ...prev, lastName: e.target.value }))}
                       placeholder="Doe"
                       className="bg-background/50"
+                      required
                     />
                   </div>
                 </div>
@@ -110,8 +178,11 @@ const ContactSection = () => {
                   <Input
                     id="email"
                     type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                     placeholder="john.doe@example.com"
                     className="bg-background/50"
+                    required
                   />
                 </div>
                 
@@ -119,8 +190,11 @@ const ContactSection = () => {
                   <Label htmlFor="subject">Subject</Label>
                   <Input
                     id="subject"
+                    value={formData.subject}
+                    onChange={(e) => setFormData(prev => ({ ...prev, subject: e.target.value }))}
                     placeholder="Project Inquiry"
                     className="bg-background/50"
+                    required
                   />
                 </div>
                 
@@ -128,15 +202,18 @@ const ContactSection = () => {
                   <Label htmlFor="message">Message</Label>
                   <Textarea
                     id="message"
+                    value={formData.message}
+                    onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
                     placeholder="Tell me about your project or just say hello!"
                     rows={5}
                     className="bg-background/50"
+                    required
                   />
                 </div>
                 
-                <Button type="submit" className="btn-hero w-full group">
+                <Button type="submit" disabled={loading} className="btn-hero w-full group">
                   <Send className="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform" />
-                  Send Message
+                  {loading ? 'Sending...' : 'Send Message'}
                 </Button>
               </form>
             </CardContent>
