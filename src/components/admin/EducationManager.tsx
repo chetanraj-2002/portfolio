@@ -79,7 +79,8 @@ export const EducationManager = () => {
     try {
       const educationData = {
         ...formData,
-        admin_id: adminProfile.id
+        admin_id: adminProfile.id,
+        end_date: formData.end_date || null // Convert empty string to null
       };
 
       if (editingItem?.id) {

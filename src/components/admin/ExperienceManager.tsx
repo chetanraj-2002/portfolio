@@ -94,6 +94,7 @@ export const ExperienceManager = () => {
       const experienceData = {
         ...formData,
         admin_id: adminProfile.id,
+        end_date: formData.end_date || null, // Convert empty string to null
         technologies: Array.isArray(formData.technologies) 
           ? formData.technologies 
           : String(formData.technologies || '').split(',').map(t => t.trim())

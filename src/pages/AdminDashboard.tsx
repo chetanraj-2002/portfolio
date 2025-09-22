@@ -349,22 +349,33 @@ const AdminDashboard = () => {
                       </div>
                     </div>
                     
-                    <div className="space-y-2 md:col-span-2">
-                      <Label htmlFor="bio">Professional Bio</Label>
-                      <Textarea
-                        id="bio"
-                        value={profile.bio || ''}
-                        onChange={(e) => setProfile({ ...profile, bio: e.target.value })}
-                        onBlur={() => updateProfile({ bio: profile.bio })}
-                        rows={4}
-                        placeholder="Write a brief professional summary..."
-                      />
-                    </div>
-                  </div>
-                  </>
-                )}
-              </CardContent>
-            </Card>
+                     <div className="space-y-2 md:col-span-2">
+                       <Label htmlFor="bio">Professional Bio</Label>
+                       <Textarea
+                         id="bio"
+                         value={profile.bio || ''}
+                         onChange={(e) => setProfile({ ...profile, bio: e.target.value })}
+                         onBlur={() => updateProfile({ bio: profile.bio })}
+                         rows={4}
+                         placeholder="Write a brief professional summary..."
+                       />
+                     </div>
+                     
+                     {/* Save Profile Button */}
+                     <div className="md:col-span-2 pt-4 border-t border-border/50">
+                       <Button 
+                         onClick={() => updateProfile(profile)}
+                         className="w-full"
+                       >
+                         <Settings className="w-4 h-4 mr-2" />
+                         Save Profile Changes
+                       </Button>
+                     </div>
+                   </div>
+                   </>
+                 )}
+               </CardContent>
+             </Card>
           </TabsContent>
 
           <TabsContent value="experience" className="space-y-6">

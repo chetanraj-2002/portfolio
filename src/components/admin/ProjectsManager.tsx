@@ -98,6 +98,8 @@ export const ProjectsManager = () => {
       const projectData = {
         ...formData,
         admin_id: adminProfile.id,
+        start_date: formData.start_date || null, // Convert empty string to null
+        end_date: formData.end_date || null, // Convert empty string to null
         technologies: Array.isArray(formData.technologies) 
           ? formData.technologies 
           : String(formData.technologies || '').split(',').map(t => t.trim())
