@@ -5,7 +5,7 @@ import StatsSection from '@/components/StatsSection';
 import DatabaseProjectsSection from '@/components/DatabaseProjectsSection';
 import DatabaseTimelineSection from '@/components/DatabaseTimelineSection';
 import DatabaseTestimonialsSection from '@/components/DatabaseTestimonialsSection';
-import MediaSection from '@/components/MediaSection';
+import DatabaseMediaSection from '@/components/DatabaseMediaSection';
 import ContactSection from '@/components/ContactSection';
 import Footer from '@/components/Footer';
 
@@ -19,7 +19,7 @@ const Index = () => {
       <DatabaseProjectsSection />
       <DatabaseTimelineSection />
       <DatabaseTestimonialsSection />
-      <MediaSection />
+      <DatabaseMediaSection />
       <ContactSection />
       <Footer />
     </div>

@@ -41,7 +41,7 @@ const DatabaseProjectsSection = () => {
         .from('portfolio_projects')
         .select('*')
         .eq('status', 'completed')
-        .order('order_index', { ascending: true });
+        .order('order_index', { ascending: false });
 
       if (error) throw error;
       setProjects(data || []);

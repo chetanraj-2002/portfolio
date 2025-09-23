@@ -4,7 +4,8 @@ import { AdminTable } from './AdminTable';
 import { useToast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Eye, CheckCircle } from 'lucide-react';
+import { Eye, CheckCircle, Trash2, X } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 interface ContactMessage {
   id: string;
@@ -77,6 +78,33 @@ export const ContactMessagesManager = () => {
     }
   };
 
+  const handleDelete = async (message: ContactMessage) => {
+    if (!confirm('Are you sure you want to delete this message?')) return;
+
+    try {
+      const { error } = await supabase
+        .from('contact_messages')
+        .delete()
+        .eq('id', message.id);
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: "Message deleted successfully",
+      });
+
+      fetchMessages();
+    } catch (error) {
+      console.error('Error deleting message:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete message",
+        variant: "destructive",
+      });
+    }
+  };
+
   const handleViewMessage = (message: ContactMessage) => {
     setSelectedMessage(message);
     if (message.status === 'unread') {
@@ -105,9 +133,12 @@ export const ContactMessagesManager = () => {
     },
     { 
       key: 'created_at', 
-      label: 'Date',
+      label: 'Date & Time',
       render: (value: string) => (
-        new Date(value).toLocaleDateString()
+        <div className="text-xs">
+          <div>{new Date(value).toLocaleDateString()}</div>
+          <div className="text-muted-foreground">{new Date(value).toLocaleTimeString()}</div>
+        </div>
       )
     }
   ];
@@ -118,6 +149,7 @@ export const ContactMessagesManager = () => {
         variant="ghost"
         size="sm"
         onClick={() => handleViewMessage(item)}
+        title="View Message"
       >
         <Eye className="w-4 h-4" />
       </Button>
@@ -126,10 +158,20 @@ export const ContactMessagesManager = () => {
           variant="ghost"
           size="sm"
           onClick={() => handleMarkAsRead(item)}
+          title="Mark as Read"
         >
           <CheckCircle className="w-4 h-4" />
         </Button>
       )}
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={() => handleDelete(item)}
+        className="text-destructive hover:text-destructive"
+        title="Delete Message"
+      >
+        <Trash2 className="w-4 h-4" />
+      </Button>
     </div>
   );
 
@@ -139,81 +181,131 @@ export const ContactMessagesManager = () => {
         data={messages}
         columns={columns}
         onEdit={handleViewMessage}
-        onDelete={() => {}} // No delete for contact messages
+        onDelete={handleDelete}
         onAdd={() => {}} // No add for contact messages
         loading={loading}
         title="Contact Messages"
+        customActions={customActions}
+        hideAddButton={true}
       />
 
-      {selectedMessage && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-background border rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-lg font-medium">Contact Message</h3>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={() => setSelectedMessage(null)}
-              >
-                ×
-              </Button>
-            </div>
-
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="text-sm font-medium">Name</label>
-                  <p className="text-sm text-muted-foreground">
-                    {selectedMessage.first_name} {selectedMessage.last_name}
-                  </p>
+      <Dialog open={!!selectedMessage} onOpenChange={() => setSelectedMessage(null)}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          {selectedMessage && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="text-xl font-display flex items-center justify-between">
+                  <span>Contact Message</span>
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    onClick={() => setSelectedMessage(null)}
+                  >
+                    <X className="w-4 h-4" />
+                  </Button>
+                </DialogTitle>
+              </DialogHeader>
+              
+              <div className="space-y-6">
+                {/* Sender Information */}
+                <div className="bg-card p-4 rounded-lg border">
+                  <h4 className="font-medium mb-3 text-primary">Sender Information</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-sm font-medium">Full Name</label>
+                      <p className="text-sm text-muted-foreground">
+                        {selectedMessage.first_name} {selectedMessage.last_name}
+                      </p>
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium">Email Address</label>
+                      <p className="text-sm text-muted-foreground">
+                        {selectedMessage.email}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <label className="text-sm font-medium">Email</label>
-                  <p className="text-sm text-muted-foreground">
-                    {selectedMessage.email}
-                  </p>
+
+                {/* Message Details */}
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-sm font-medium">Subject</label>
+                    <p className="text-sm text-muted-foreground mt-1 p-3 bg-muted rounded-md">
+                      {selectedMessage.subject}
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="text-sm font-medium">Message</label>
+                    <div className="mt-2 p-4 bg-muted rounded-md border">
+                      <p className="text-sm whitespace-pre-wrap leading-relaxed">
+                        {selectedMessage.message}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Metadata */}
+                <div className="bg-card p-4 rounded-lg border">
+                  <h4 className="font-medium mb-3 text-primary">Message Details</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                    <div>
+                      <label className="font-medium">Received Date</label>
+                      <p className="text-muted-foreground">
+                        {new Date(selectedMessage.created_at).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <div>
+                      <label className="font-medium">Received Time</label>
+                      <p className="text-muted-foreground">
+                        {new Date(selectedMessage.created_at).toLocaleTimeString()}
+                      </p>
+                    </div>
+                    <div>
+                      <label className="font-medium">Status</label>
+                      <Badge variant={selectedMessage.status === 'unread' ? 'destructive' : 'default'}>
+                        {selectedMessage.status}
+                      </Badge>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Actions */}
+                <div className="flex gap-3 pt-4 border-t">
+                  <Button 
+                    onClick={() => window.open(`mailto:${selectedMessage.email}?subject=Re: ${selectedMessage.subject}`)}
+                    className="flex-1"
+                  >
+                    Reply via Email
+                  </Button>
+                  {selectedMessage.status === 'unread' && (
+                    <Button 
+                      variant="outline"
+                      onClick={() => {
+                        handleMarkAsRead(selectedMessage);
+                        setSelectedMessage(null);
+                      }}
+                    >
+                      <CheckCircle className="w-4 h-4 mr-2" />
+                      Mark as Read
+                    </Button>
+                  )}
+                  <Button 
+                    variant="destructive"
+                    onClick={() => {
+                      handleDelete(selectedMessage);
+                      setSelectedMessage(null);
+                    }}
+                  >
+                    <Trash2 className="w-4 h-4 mr-2" />
+                    Delete
+                  </Button>
                 </div>
               </div>
-
-              <div>
-                <label className="text-sm font-medium">Subject</label>
-                <p className="text-sm text-muted-foreground">
-                  {selectedMessage.subject}
-                </p>
-              </div>
-
-              <div>
-                <label className="text-sm font-medium">Message</label>
-                <div className="mt-2 p-4 bg-muted rounded-md">
-                  <p className="text-sm whitespace-pre-wrap">
-                    {selectedMessage.message}
-                  </p>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4 text-sm text-muted-foreground">
-                <div>
-                  <label className="font-medium">Received</label>
-                  <p>{new Date(selectedMessage.created_at).toLocaleString()}</p>
-                </div>
-                <div>
-                  <label className="font-medium">Status</label>
-                  <p>{selectedMessage.status}</p>
-                </div>
-              </div>
-
-              <div className="pt-4">
-                <Button 
-                  onClick={() => window.open(`mailto:${selectedMessage.email}?subject=Re: ${selectedMessage.subject}`)}
-                  className="w-full"
-                >
-                  Reply via Email
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

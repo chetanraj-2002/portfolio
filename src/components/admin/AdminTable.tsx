@@ -24,6 +24,8 @@ interface AdminTableProps {
   onAdd: () => void;
   loading?: boolean;
   title: string;
+  customActions?: (item: any) => React.ReactNode;
+  hideAddButton?: boolean;
 }
 
 export const AdminTable = ({
@@ -33,17 +35,21 @@ export const AdminTable = ({
   onDelete,
   onAdd,
   loading = false,
-  title
+  title,
+  customActions,
+  hideAddButton = false
 }: AdminTableProps) => {
   if (loading) {
     return (
       <div className="space-y-4">
         <div className="flex justify-between items-center">
           <h3 className="text-lg font-medium">{title}</h3>
-          <Button onClick={onAdd} className="gap-2">
-            <Plus className="w-4 h-4" />
-            Add New
-          </Button>
+          {!hideAddButton && (
+            <Button onClick={onAdd} className="gap-2">
+              <Plus className="w-4 h-4" />
+              Add New
+            </Button>
+          )}
         </div>
         <div className="border rounded-md p-4">
           <p className="text-muted-foreground">Loading...</p>
@@ -56,19 +62,23 @@ export const AdminTable = ({
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h3 className="text-lg font-medium">{title}</h3>
-        <Button onClick={onAdd} className="gap-2">
-          <Plus className="w-4 h-4" />
-          Add New
-        </Button>
+        {!hideAddButton && (
+          <Button onClick={onAdd} className="gap-2">
+            <Plus className="w-4 h-4" />
+            Add New
+          </Button>
+        )}
       </div>
 
       {data.length === 0 ? (
         <div className="border rounded-md p-8 text-center">
           <p className="text-muted-foreground mb-4">No {title.toLowerCase()} found</p>
-          <Button onClick={onAdd} variant="outline" className="gap-2">
-            <Plus className="w-4 h-4" />
-            Add First {title.slice(0, -1)}
-          </Button>
+          {!hideAddButton && (
+            <Button onClick={onAdd} variant="outline" className="gap-2">
+              <Plus className="w-4 h-4" />
+              Add First {title.slice(0, -1)}
+            </Button>
+          )}
         </div>
       ) : (
         <div className="border rounded-md">
@@ -93,22 +103,26 @@ export const AdminTable = ({
                     </TableCell>
                   ))}
                   <TableCell>
-                    <div className="flex gap-2">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => onEdit(item)}
-                      >
-                        <Edit className="w-4 h-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => onDelete(item)}
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </div>
+                    {customActions ? (
+                      customActions(item)
+                    ) : (
+                      <div className="flex gap-2">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => onEdit(item)}
+                        >
+                          <Edit className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => onDelete(item)}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    )}
                   </TableCell>
                 </TableRow>
               ))}

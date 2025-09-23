@@ -147,18 +147,15 @@ const DatabaseAboutSection = () => {
             <CardContent>
               <div className="flex flex-wrap gap-3">
                 {skills.slice(0, 8).map((skill, index) => (
-                  <div
+                  <Button
                     key={skill.id}
-                    className="relative group"
-                    style={{ animationDelay: `${index * 100}ms` }}
+                    variant="outline"
+                    size="sm"
+                    className="skill-tag px-4 py-2 text-sm font-medium text-primary rounded-full hover:bg-primary/10"
+                    onClick={() => setShowSkillsModal(true)}
                   >
-                    <span className="skill-tag px-4 py-2 text-sm font-medium text-primary rounded-full">
-                      {skill.skill_name}
-                    </span>
-                    <div className={`absolute bottom-0 left-0 h-1 rounded-full ${getSkillColor(skill.proficiency_level)} opacity-70`}
-                         style={{ width: `${(skill.proficiency_level / 5) * 100}%` }}>
-                    </div>
-                  </div>
+                    {skill.skill_name}
+                  </Button>
                 ))}
                 {skills.length > 8 && (
                   <Button
