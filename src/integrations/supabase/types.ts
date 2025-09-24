@@ -152,6 +152,13 @@ export type Database = {
             referencedRelation: "admin_profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "education_admin_id_fkey"
+            columns: ["admin_id"]
+            isOneToOne: false
+            referencedRelation: "public_admin_profile"
+            referencedColumns: ["id"]
+          },
         ]
       }
       media_gallery: {
@@ -301,6 +308,13 @@ export type Database = {
             referencedRelation: "admin_profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "portfolio_projects_admin_id_fkey"
+            columns: ["admin_id"]
+            isOneToOne: false
+            referencedRelation: "public_admin_profile"
+            referencedColumns: ["id"]
+          },
         ]
       }
       profiles: {
@@ -428,6 +442,13 @@ export type Database = {
             referencedRelation: "admin_profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "skills_admin_id_fkey"
+            columns: ["admin_id"]
+            isOneToOne: false
+            referencedRelation: "public_admin_profile"
+            referencedColumns: ["id"]
+          },
         ]
       }
       testimonials: {
@@ -529,11 +550,53 @@ export type Database = {
             referencedRelation: "admin_profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "work_experiences_admin_id_fkey"
+            columns: ["admin_id"]
+            isOneToOne: false
+            referencedRelation: "public_admin_profile"
+            referencedColumns: ["id"]
+          },
         ]
       }
     }
     Views: {
-      [_ in never]: never
+      public_admin_profile: {
+        Row: {
+          bio: string | null
+          created_at: string | null
+          full_name: string | null
+          github_url: string | null
+          id: string | null
+          linkedin_url: string | null
+          location: string | null
+          profile_image_url: string | null
+          title: string | null
+        }
+        Insert: {
+          bio?: string | null
+          created_at?: string | null
+          full_name?: string | null
+          github_url?: string | null
+          id?: string | null
+          linkedin_url?: string | null
+          location?: string | null
+          profile_image_url?: string | null
+          title?: string | null
+        }
+        Update: {
+          bio?: string | null
+          created_at?: string | null
+          full_name?: string | null
+          github_url?: string | null
+          id?: string | null
+          linkedin_url?: string | null
+          location?: string | null
+          profile_image_url?: string | null
+          title?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       is_admin: {
