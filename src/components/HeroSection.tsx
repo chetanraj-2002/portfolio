@@ -1,10 +1,23 @@
 import { useState, useEffect } from 'react';
 import { Github, Linkedin, Mail, Download, Code, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { supabase } from '@/integrations/supabase/client';
 import profileImage from '@/assets/chetanraj-profile.jpg';
+
+interface AdminProfile {
+  id: string;
+  full_name: string;
+  title: string;
+  bio: string;
+  profile_image_url: string;
+  linkedin_url: string;
+  github_url: string;
+  location: string;
+}
 
 const HeroSection = () => {
   const [text, setText] = useState('');
+  const [adminProfile, setAdminProfile] = useState<AdminProfile | null>(null);
   const fullText = 'Creative Developer';
   
   useEffect(() => {
@@ -21,11 +34,44 @@ const HeroSection = () => {
     return () => clearInterval(timer);
   }, []);
 
-  const socialLinks = [
-    { icon: Github, href: 'https://github.com/chetanraj-2002', label: 'GitHub' },
-    { icon: Linkedin, href: 'https://www.linkedin.com/in/chetanraj-jakanur-1425451b4/', label: 'LinkedIn' },
-    { icon: Mail, href: 'mailto:chetanrajjakanur2002@gmail.com', label: 'Email' }
-  ];
+  useEffect(() => {
+    fetchAdminProfile();
+  }, []);
+
+  const fetchAdminProfile = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('public_admin_profile')
+        .select('*')
+        .maybeSingle();
+      
+      if (!error && data) {
+        setAdminProfile(data);
+      }
+    } catch (error) {
+      console.error('Error fetching admin profile:', error);
+    }
+  };
+
+  const getSocialLinks = () => {
+    const defaultLinks = [
+      { icon: Github, href: 'https://github.com/chetanraj-2002', label: 'GitHub' },
+      { icon: Linkedin, href: 'https://www.linkedin.com/in/chetanraj-jakanur-1425451b4/', label: 'LinkedIn' },
+      { icon: Mail, href: 'mailto:chetanrajjakanur2002@gmail.com', label: 'Email' }
+    ];
+
+    if (adminProfile) {
+      return [
+        { icon: Github, href: adminProfile.github_url || defaultLinks[0].href, label: 'GitHub' },
+        { icon: Linkedin, href: adminProfile.linkedin_url || defaultLinks[1].href, label: 'LinkedIn' },
+        { icon: Mail, href: `mailto:${adminProfile.full_name}`, label: 'Email' }
+      ];
+    }
+
+    return defaultLinks;
+  };
+
+  const socialLinks = getSocialLinks();
 
   return (
     <section id="home" className="min-h-screen flex items-center justify-center pt-20 relative overflow-hidden">
@@ -47,15 +93,15 @@ const HeroSection = () => {
               </div>
               
               <h1 className="text-5xl lg:text-7xl font-display font-bold text-gradient leading-tight">
-                CHETANRAJ JAKANUR
+                {adminProfile?.full_name?.toUpperCase() || 'CHETANRAJ JAKANUR'}
               </h1>
               
               <div className="text-2xl lg:text-3xl font-medium text-muted-foreground min-h-[40px]">
-                <span className="typewriter">{text}</span>
+                <span className="typewriter">{adminProfile?.title || text}</span>
               </div>
               
               <p className="text-lg text-muted-foreground max-w-lg leading-relaxed">
-                Full Stack Developer — Cloud Engineer — Database Engineer. Proficient in building dynamic web applications using MERN stack, Flask, and Flutter with hands-on experience in AI/ML models and cloud-based services.
+                {adminProfile?.bio || 'Full Stack Developer — Cloud Engineer — Database Engineer. Proficient in building dynamic web applications using MERN stack, Flask, and Flutter with hands-on experience in AI/ML models and cloud-based services.'}
               </p>
             </div>
 
@@ -117,8 +163,8 @@ const HeroSection = () => {
               {/* Main image container */}
               <div className="relative w-80 h-80 rounded-full overflow-hidden card-glass animate-float border-2 border-primary/20">
                 <img
-                  src={profileImage}
-                  alt="CHETANRAJ JAKANUR - Full Stack Developer"
+                  src={adminProfile?.profile_image_url || profileImage}
+                  alt={`${adminProfile?.full_name || 'CHETANRAJ JAKANUR'} - ${adminProfile?.title || 'Full Stack Developer'}`}
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-transparent"></div>
