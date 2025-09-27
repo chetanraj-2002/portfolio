@@ -6,6 +6,7 @@ import DatabaseProjectsSection from '@/components/DatabaseProjectsSection';
 import DatabaseTimelineSection from '@/components/DatabaseTimelineSection';
 import DatabaseTestimonialsSection from '@/components/DatabaseTestimonialsSection';
 import DatabaseMediaSection from '@/components/DatabaseMediaSection';
+import DatabaseCertificatesSection from '@/components/DatabaseCertificatesSection';
 import ContactSection from '@/components/ContactSection';
 import Footer from '@/components/Footer';
 
@@ -17,6 +18,7 @@ const Index = () => {
       <DatabaseAboutSection />
       <StatsSection />
       <DatabaseProjectsSection />
+      <DatabaseCertificatesSection />
       <DatabaseTimelineSection />
       <DatabaseTestimonialsSection />
       <DatabaseMediaSection />

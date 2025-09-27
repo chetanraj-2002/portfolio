@@ -129,17 +129,62 @@ const Navigation = () => {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden mt-4 py-4 border-t border-border">
-            <div className="flex flex-col space-y-4">
+          <div className="md:hidden mt-4 py-4 border-t border-border bg-background/95 backdrop-blur-lg rounded-lg border border-border/50">
+            <div className="flex flex-col space-y-4 p-4">
               {navLinks.map((link) => (
                 <button
                   key={link.href}
                   onClick={() => scrollToSection(link.href)}
-                  className="text-left text-foreground hover:text-primary transition-colors duration-300"
+                  className="text-left text-foreground hover:text-primary transition-colors duration-300 p-2 rounded-md hover:bg-accent/50"
                 >
                   {link.label}
                 </button>
               ))}
+              
+              {/* Mobile Admin Controls */}
+              <div className="border-t border-border/50 pt-4 mt-4">
+                {user ? (
+                  <div className="flex flex-col gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        navigate('/admin');
+                        setIsMenuOpen(false);
+                      }}
+                      className="flex items-center gap-2 justify-start"
+                    >
+                      <Settings className="w-4 h-4" />
+                      Admin Dashboard
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        handleSignOut();
+                        setIsMenuOpen(false);
+                      }}
+                      className="flex items-center gap-2 justify-start"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      Sign Out
+                    </Button>
+                  </div>
+                ) : (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      navigate('/auth');
+                      setIsMenuOpen(false);
+                    }}
+                    className="flex items-center gap-2 justify-start w-full"
+                  >
+                    <UserIcon className="w-4 h-4" />
+                    Admin Login
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
         )}

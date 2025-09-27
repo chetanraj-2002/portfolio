@@ -13,6 +13,7 @@ import { TestimonialsManager } from '@/components/admin/TestimonialsManager';
 import { MediaManager } from '@/components/admin/MediaManager';
 import { ContactMessagesManager } from '@/components/admin/ContactMessagesManager';
 import { SkillsManager } from '@/components/admin/SkillsManager';
+import CertificatesManager from '@/components/admin/CertificatesManager';
 import { 
   Settings, 
   FileText, 
@@ -220,6 +221,7 @@ const AdminDashboard = () => {
             <TabsTrigger value="projects">Projects</TabsTrigger>
             <TabsTrigger value="education">Education</TabsTrigger>
             <TabsTrigger value="skills">Skills</TabsTrigger>
+            <TabsTrigger value="certificates">Certificates</TabsTrigger>
             <TabsTrigger value="testimonials">Testimonials</TabsTrigger>
             <TabsTrigger value="media">Media</TabsTrigger>
             <TabsTrigger value="contact">Messages</TabsTrigger>
@@ -460,6 +462,10 @@ const AdminDashboard = () => {
                 <MediaManager />
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="certificates" className="space-y-6">
+            {profile && <CertificatesManager adminId={profile.id} />}
           </TabsContent>
 
           <TabsContent value="contact" className="space-y-6">

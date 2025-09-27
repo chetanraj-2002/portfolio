@@ -36,6 +36,25 @@ const HeroSection = () => {
 
   useEffect(() => {
     fetchAdminProfile();
+    
+    // Set up real-time subscription for profile updates
+    const subscription = supabase
+      .channel('admin_profile_changes')
+      .on('postgres_changes', 
+        { 
+          event: '*', 
+          schema: 'public', 
+          table: 'admin_profiles' 
+        }, 
+        () => {
+          fetchAdminProfile();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   const fetchAdminProfile = async () => {

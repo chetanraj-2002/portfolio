@@ -65,6 +65,60 @@ export type Database = {
         }
         Relationships: []
       }
+      certificates: {
+        Row: {
+          admin_id: string
+          certificate_image_url: string | null
+          certificate_name: string
+          created_at: string
+          credential_id: string | null
+          credential_url: string | null
+          description: string | null
+          expiry_date: string | null
+          featured: boolean | null
+          id: string
+          issue_date: string
+          issuing_organization: string
+          order_index: number | null
+          skills_demonstrated: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          admin_id: string
+          certificate_image_url?: string | null
+          certificate_name: string
+          created_at?: string
+          credential_id?: string | null
+          credential_url?: string | null
+          description?: string | null
+          expiry_date?: string | null
+          featured?: boolean | null
+          id?: string
+          issue_date: string
+          issuing_organization: string
+          order_index?: number | null
+          skills_demonstrated?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          admin_id?: string
+          certificate_image_url?: string | null
+          certificate_name?: string
+          created_at?: string
+          credential_id?: string | null
+          credential_url?: string | null
+          description?: string | null
+          expiry_date?: string | null
+          featured?: boolean | null
+          id?: string
+          issue_date?: string
+          issuing_organization?: string
+          order_index?: number | null
+          skills_demonstrated?: string[] | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       contact_messages: {
         Row: {
           created_at: string | null

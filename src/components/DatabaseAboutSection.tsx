@@ -222,7 +222,15 @@ const DatabaseAboutSection = () => {
 
         {/* Resume Download */}
         <div className="text-center">
-          <Button className="btn-hero group">
+          <Button 
+            className="btn-hero group"
+            onClick={() => {
+              const link = document.createElement('a');
+              link.href = '/ChetanrajJakanur_Resume.pdf';
+              link.download = 'ChetanrajJakanur_Resume.pdf';
+              link.click();
+            }}
+          >
             <Download className="w-4 h-4 mr-2 group-hover:animate-bounce" />
             Download Full Resume
           </Button>
