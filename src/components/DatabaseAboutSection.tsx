@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Download, GraduationCap, Briefcase, Code, Eye, X } from 'lucide-react';
+import { Download, GraduationCap, Briefcase, Code, Eye, X, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { supabase } from '@/integrations/supabase/client';
 
 interface Skill {
@@ -32,6 +34,8 @@ interface Experience {
   end_date?: string;
   is_current: boolean;
   description?: string;
+  location?: string;
+  technologies?: string[];
 }
 
 const DatabaseAboutSection = () => {
@@ -41,6 +45,8 @@ const DatabaseAboutSection = () => {
   const [loading, setLoading] = useState(true);
   const [showSkillsModal, setShowSkillsModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [showKnowMoreModal, setShowKnowMoreModal] = useState(false);
+  const [expandedSections, setExpandedSections] = useState<string[]>([]);
 
   useEffect(() => {
     fetchData();
@@ -126,99 +132,151 @@ const DatabaseAboutSection = () => {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8 mb-12">
-          {/* Skills */}
-          <Card className="card-glass hover-lift">
-            <CardHeader>
-              <CardTitle className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
+        {/* Know More Popover */}
+        <div className="text-center mb-8">
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" className="gap-2">
+                Know More
+                <ChevronDown className="w-4 h-4" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-80 bg-background border shadow-lg">
+              <div className="space-y-4">
+                <h3 className="font-semibold text-lg">Detailed Information</h3>
+                <div className="space-y-2">
+                  <Button 
+                    variant="ghost" 
+                    className="w-full justify-start"
+                    onClick={() => setShowSkillsModal(true)}
+                  >
+                    <Code className="w-4 h-4 mr-2" />
+                    View All Skills
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    className="w-full justify-start"
+                    onClick={() => setShowKnowMoreModal(true)}
+                  >
+                    <Eye className="w-4 h-4 mr-2" />
+                    Complete Overview
+                  </Button>
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
+        </div>
+
+        {/* Dynamic Accordion Layout */}
+        <Accordion type="multiple" value={expandedSections} onValueChange={setExpandedSections} className="space-y-4 mb-12">
+          {/* Skills Section */}
+          <AccordionItem value="skills" className="border rounded-lg">
+            <Card className="card-glass hover-lift border-0">
+              <AccordionTrigger className="p-6 hover:no-underline">
+                <CardTitle className="flex items-center gap-2">
                   <Code className="w-6 h-6 text-primary" />
                   Skills
-                </div>
-                <Button 
-                  variant="ghost" 
-                  size="sm"
-                  onClick={() => setShowSkillsModal(true)}
-                >
-                  <Eye className="w-4 h-4" />
-                </Button>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex flex-wrap gap-3">
-                {skills.slice(0, 8).map((skill, index) => (
-                  <Button
-                    key={skill.id}
-                    variant="outline"
-                    size="sm"
-                    className="skill-tag px-4 py-2 text-sm font-medium text-primary rounded-full hover:bg-primary/10"
-                    onClick={() => setShowSkillsModal(true)}
-                  >
-                    {skill.skill_name}
-                  </Button>
-                ))}
-                {skills.length > 8 && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="skill-tag px-4 py-2 text-sm font-medium text-muted-foreground rounded-full"
-                    onClick={() => setShowSkillsModal(true)}
-                  >
-                    +{skills.length - 8} more
-                  </Button>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Education */}
-          <Card className="card-glass hover-lift">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <GraduationCap className="w-6 h-6 text-primary" />
-                Education
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {education.slice(0, 2).map((edu) => (
-                <div key={edu.id} className="space-y-2">
-                  <h4 className="font-semibold">{edu.degree}</h4>
-                  <p className="text-muted-foreground">{edu.institution_name}</p>
-                  <p className="text-sm text-primary">
-                    {formatPeriod(edu.start_date, edu.end_date)}
-                  </p>
-                  {edu.grade && (
-                    <p className="text-sm">Grade: {edu.grade}</p>
+                </CardTitle>
+              </AccordionTrigger>
+              <AccordionContent className="px-6 pb-6">
+                <div className="flex flex-wrap gap-3">
+                  {skills.slice(0, 12).map((skill) => (
+                    <Button
+                      key={skill.id}
+                      variant="outline"
+                      size="sm"
+                      className="skill-tag px-4 py-2 text-sm font-medium text-primary rounded-full hover:bg-primary/10"
+                      onClick={() => setShowSkillsModal(true)}
+                    >
+                      {skill.skill_name}
+                    </Button>
+                  ))}
+                  {skills.length > 12 && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="skill-tag px-4 py-2 text-sm font-medium text-muted-foreground rounded-full"
+                      onClick={() => setShowSkillsModal(true)}
+                    >
+                      +{skills.length - 12} more
+                    </Button>
                   )}
                 </div>
-              ))}
-            </CardContent>
-          </Card>
+              </AccordionContent>
+            </Card>
+          </AccordionItem>
 
-          {/* Experience */}
-          <Card className="card-glass hover-lift">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Briefcase className="w-6 h-6 text-primary" />
-                Experience
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {experience.slice(0, 2).map((exp) => (
-                <div key={exp.id} className="space-y-2">
-                  <h4 className="font-semibold">{exp.position}</h4>
-                  <p className="text-muted-foreground">{exp.company_name}</p>
-                  <p className="text-sm text-primary">
-                    {formatPeriod(exp.start_date, exp.end_date, exp.is_current)}
-                  </p>
-                  {exp.description && (
-                    <p className="text-sm line-clamp-2">{exp.description}</p>
-                  )}
+          {/* Education Section */}
+          <AccordionItem value="education" className="border rounded-lg">
+            <Card className="card-glass hover-lift border-0">
+              <AccordionTrigger className="p-6 hover:no-underline">
+                <CardTitle className="flex items-center gap-2">
+                  <GraduationCap className="w-6 h-6 text-primary" />
+                  Education
+                </CardTitle>
+              </AccordionTrigger>
+              <AccordionContent className="px-6 pb-6">
+                <div className="space-y-4">
+                  {education.map((edu) => (
+                    <div key={edu.id} className="space-y-2 p-4 rounded-lg bg-muted/50">
+                      <h4 className="font-semibold">{edu.degree}</h4>
+                      <p className="text-muted-foreground">{edu.institution_name}</p>
+                      <p className="text-sm text-primary">
+                        {formatPeriod(edu.start_date, edu.end_date)}
+                      </p>
+                      {edu.grade && (
+                        <p className="text-sm">Grade: {edu.grade}</p>
+                      )}
+                      {edu.field_of_study && (
+                        <p className="text-sm">Field: {edu.field_of_study}</p>
+                      )}
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </CardContent>
-          </Card>
-        </div>
+              </AccordionContent>
+            </Card>
+          </AccordionItem>
+
+          {/* Experience Section */}
+          <AccordionItem value="experience" className="border rounded-lg">
+            <Card className="card-glass hover-lift border-0">
+              <AccordionTrigger className="p-6 hover:no-underline">
+                <CardTitle className="flex items-center gap-2">
+                  <Briefcase className="w-6 h-6 text-primary" />
+                  Experience
+                </CardTitle>
+              </AccordionTrigger>
+              <AccordionContent className="px-6 pb-6">
+                <div className="space-y-4">
+                  {experience.map((exp) => (
+                    <div key={exp.id} className="space-y-2 p-4 rounded-lg bg-muted/50">
+                      <h4 className="font-semibold">{exp.position}</h4>
+                      <p className="text-muted-foreground">{exp.company_name}</p>
+                      <p className="text-sm text-primary">
+                        {formatPeriod(exp.start_date, exp.end_date, exp.is_current)}
+                      </p>
+                      {exp.location && (
+                        <p className="text-sm">Location: {exp.location}</p>
+                      )}
+                      {exp.description && (
+                        <p className="text-sm">{exp.description}</p>
+                      )}
+                      {exp.technologies && exp.technologies.length > 0 && (
+                        <div className="flex flex-wrap gap-2 mt-2">
+                          {exp.technologies.map((tech, index) => (
+                            <Badge key={index} variant="secondary" className="text-xs">
+                              {tech}
+                            </Badge>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </AccordionContent>
+            </Card>
+          </AccordionItem>
+        </Accordion>
 
         {/* Resume Download */}
         <div className="text-center">
@@ -298,6 +356,94 @@ const DatabaseAboutSection = () => {
                   </Card>
                 ))}
               </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Know More Modal */}
+        <Dialog open={showKnowMoreModal} onOpenChange={setShowKnowMoreModal}>
+          <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle className="text-2xl font-display flex items-center justify-between">
+                <span>Complete Overview</span>
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={() => setShowKnowMoreModal(false)}
+                >
+                  <X className="w-4 h-4" />
+                </Button>
+              </DialogTitle>
+            </DialogHeader>
+            
+            <div className="grid lg:grid-cols-3 gap-8">
+              {/* Skills Overview */}
+              <Card className="card-glass">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Code className="w-6 h-6 text-primary" />
+                    Skills Overview
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {getUniqueCategories().map((category) => (
+                      <div key={category} className="space-y-2">
+                        <h4 className="font-semibold text-sm">{category}</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {skills.filter(s => s.category === category).slice(0, 5).map((skill) => (
+                            <Badge key={skill.id} variant="secondary" className="text-xs">
+                              {skill.skill_name}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Education Overview */}
+              <Card className="card-glass">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <GraduationCap className="w-6 h-6 text-primary" />
+                    Education Overview
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {education.map((edu) => (
+                    <div key={edu.id} className="space-y-2 p-3 rounded bg-muted/50">
+                      <h4 className="font-semibold text-sm">{edu.degree}</h4>
+                      <p className="text-sm text-muted-foreground">{edu.institution_name}</p>
+                      <p className="text-xs text-primary">
+                        {formatPeriod(edu.start_date, edu.end_date)}
+                      </p>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+
+              {/* Experience Overview */}
+              <Card className="card-glass">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Briefcase className="w-6 h-6 text-primary" />
+                    Experience Overview
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {experience.map((exp) => (
+                    <div key={exp.id} className="space-y-2 p-3 rounded bg-muted/50">
+                      <h4 className="font-semibold text-sm">{exp.position}</h4>
+                      <p className="text-sm text-muted-foreground">{exp.company_name}</p>
+                      <p className="text-xs text-primary">
+                        {formatPeriod(exp.start_date, exp.end_date, exp.is_current)}
+                      </p>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
             </div>
           </DialogContent>
         </Dialog>
