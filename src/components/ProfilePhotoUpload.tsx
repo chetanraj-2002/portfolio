@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Camera, Upload } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 interface ProfilePhotoUploadProps {
   currentPhotoUrl?: string;
@@ -54,12 +55,34 @@ const ProfilePhotoUpload = ({
     setIsUploading(true);
 
     try {
-      // For now, we'll use a local URL for demo purposes
-      // In a real app, you'd upload to Supabase Storage
-      const objectUrl = URL.createObjectURL(file);
-      
+      // Get the current user
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        throw new Error('User not authenticated');
+      }
+
+      // Generate a unique filename
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${user.id}/profile-photo.${fileExt}`;
+
+      // Upload to Supabase Storage
+      const { error: uploadError } = await supabase.storage
+        .from('media-uploads')
+        .upload(fileName, file, {
+          upsert: true, // Replace existing file
+        });
+
+      if (uploadError) {
+        throw uploadError;
+      }
+
+      // Get the public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('media-uploads')
+        .getPublicUrl(fileName);
+
       if (onPhotoUpdate) {
-        onPhotoUpdate(objectUrl);
+        onPhotoUpdate(publicUrl);
       }
 
       toast({
