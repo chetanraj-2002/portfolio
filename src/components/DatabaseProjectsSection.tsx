@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { ExternalLink, Github, Eye, Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -6,6 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
+import { useScrollReveal } from '@/hooks/use-scroll-reveal';
 
 interface Project {
   id: string;
@@ -26,7 +27,7 @@ const DatabaseProjectsSection = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [filter, setFilter] = useState<string>('all');
   const [showAll, setShowAll] = useState(false);
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const { isVisible, sectionRef } = useScrollReveal(600);
 
   useEffect(() => {
     fetchProjects();
@@ -104,7 +105,7 @@ const DatabaseProjectsSection = () => {
   return (
     <section 
       id="projects" 
-      className="py-20"
+      className={`py-20 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
       ref={sectionRef}
     >
       <div className="container mx-auto px-6">
@@ -243,7 +244,7 @@ const DatabaseProjectsSection = () => {
               onClick={() => setShowAll(true)}
             >
               <Eye className="w-4 h-4 mr-2" />
-              View More Projects ({filteredProjects.length - 6} more)
+              View More
             </Button>
           </div>
         )}

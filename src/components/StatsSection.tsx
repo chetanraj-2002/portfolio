@@ -1,15 +1,16 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { Code, Users, Award } from 'lucide-react';
+import { useScrollReveal } from '@/hooks/use-scroll-reveal';
 
 const StatsSection = () => {
-  const [isVisible, setIsVisible] = useState(false);
+  const [hasAnimated, setHasAnimated] = useState(false);
   const [counts, setCounts] = useState({
     projects: 0,
     clients: 0,
     awards: 0
   });
   
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const { isVisible: isVisibleSection, sectionRef } = useScrollReveal(600);
 
   const stats = [
     {
@@ -38,8 +39,8 @@ const StatsSection = () => {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
+        if (entry.isIntersecting && !hasAnimated) {
+          setHasAnimated(true);
         }
       },
       { threshold: 0.3 }
@@ -50,10 +51,10 @@ const StatsSection = () => {
     }
 
     return () => observer.disconnect();
-  }, []);
+  }, [hasAnimated]);
 
   useEffect(() => {
-    if (!isVisible) return;
+    if (!hasAnimated) return;
 
     const animateCounter = (target: number, key: keyof typeof counts) => {
       const duration = 2000;
@@ -74,12 +75,12 @@ const StatsSection = () => {
     stats.forEach(stat => {
       animateCounter(stat.target, stat.key);
     });
-  }, [isVisible]);
+  }, [hasAnimated]);
 
   return (
     <section 
       ref={sectionRef} 
-      className="py-20 relative"
+      className={`py-20 relative transition-all duration-1000 ${isVisibleSection ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
     >
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">

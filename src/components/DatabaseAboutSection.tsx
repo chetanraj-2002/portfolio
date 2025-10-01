@@ -1,11 +1,12 @@
-import { useEffect, useState, useRef } from 'react';
-import { Download, GraduationCap, Briefcase, Code, X, ChevronDown } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Download, GraduationCap, Briefcase, Code, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
+import { useScrollReveal } from '@/hooks/use-scroll-reveal';
 
 interface Skill {
   id: string;
@@ -45,7 +46,7 @@ const DatabaseAboutSection = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedEducation, setSelectedEducation] = useState<Education | null>(null);
   const [selectedExperience, setSelectedExperience] = useState<Experience | null>(null);
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const { isVisible, sectionRef } = useScrollReveal(600);
 
   useEffect(() => {
     fetchData();
@@ -128,7 +129,7 @@ const DatabaseAboutSection = () => {
   return (
     <section 
       id="about" 
-      className="py-20"
+      className={`py-20 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
       ref={sectionRef}
     >
       <div className="container mx-auto px-6">
@@ -143,19 +144,20 @@ const DatabaseAboutSection = () => {
         <div className="grid lg:grid-cols-3 gap-8 mb-12">
           {/* Skills Section */}
           <Card className="card-glass hover-lift">
-            <CardHeader 
-              className="cursor-pointer"
-              onClick={() => setShowSkillsModal(true)}
-            >
+            <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Code className="w-6 h-6 text-primary" />
-                Skills ({skills.length})
+                Skills
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground text-sm">
-                Click to view all skills and expertise
-              </p>
+              <Button 
+                variant="outline" 
+                className="w-full"
+                onClick={() => setShowSkillsModal(true)}
+              >
+                View All Skills
+              </Button>
             </CardContent>
           </Card>
 
@@ -164,27 +166,17 @@ const DatabaseAboutSection = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <GraduationCap className="w-6 h-6 text-primary" />
-                Education ({education.length})
+                Education
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-3">
-                {education.slice(0, 2).map((edu) => (
-                  <button
-                    key={edu.id}
-                    onClick={() => setSelectedEducation(edu)}
-                    className="w-full text-left p-3 rounded-lg hover:bg-accent/20 transition-colors border border-transparent hover:border-primary/20"
-                  >
-                    <h4 className="font-semibold text-sm">{edu.degree}</h4>
-                    <p className="text-muted-foreground text-xs">{edu.institution_name}</p>
-                  </button>
-                ))}
-                {education.length > 2 && (
-                  <p className="text-sm text-muted-foreground text-center">
-                    +{education.length - 2} more (click to view)
-                  </p>
-                )}
-              </div>
+              <Button 
+                variant="outline" 
+                className="w-full"
+                onClick={() => setSelectedEducation({ all: true } as any)}
+              >
+                View All Education
+              </Button>
             </CardContent>
           </Card>
 
@@ -193,27 +185,17 @@ const DatabaseAboutSection = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Briefcase className="w-6 h-6 text-primary" />
-                Experience ({experience.length})
+                Experience
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-3">
-                {experience.slice(0, 2).map((exp) => (
-                  <button
-                    key={exp.id}
-                    onClick={() => setSelectedExperience(exp)}
-                    className="w-full text-left p-3 rounded-lg hover:bg-accent/20 transition-colors border border-transparent hover:border-primary/20"
-                  >
-                    <h4 className="font-semibold text-sm">{exp.position}</h4>
-                    <p className="text-muted-foreground text-xs">{exp.company_name}</p>
-                  </button>
-                ))}
-                {experience.length > 2 && (
-                  <p className="text-sm text-muted-foreground text-center">
-                    +{experience.length - 2} more (click to view)
-                  </p>
-                )}
-              </div>
+              <Button 
+                variant="outline" 
+                className="w-full"
+                onClick={() => setSelectedExperience({ all: true } as any)}
+              >
+                View All Experience
+              </Button>
             </CardContent>
           </Card>
         </div>
@@ -302,34 +284,41 @@ const DatabaseAboutSection = () => {
 
         {/* Education Detail Modal */}
         <Dialog open={!!selectedEducation} onOpenChange={() => setSelectedEducation(null)}>
-          <DialogContent className="max-w-2xl">
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
             {selectedEducation && (
               <>
                 <DialogHeader>
                   <DialogTitle className="text-2xl font-display flex items-center gap-2">
                     <GraduationCap className="w-6 h-6 text-primary" />
-                    {selectedEducation.degree}
+                    Education
                   </DialogTitle>
                 </DialogHeader>
-                <div className="space-y-4">
-                  <div>
-                    <h4 className="font-semibold text-lg">{selectedEducation.institution_name}</h4>
-                    <p className="text-primary">
-                      {formatPeriod(selectedEducation.start_date, selectedEducation.end_date)}
-                    </p>
-                  </div>
-                  {selectedEducation.field_of_study && (
-                    <div>
-                      <p className="text-sm text-muted-foreground">Field of Study</p>
-                      <p className="font-medium">{selectedEducation.field_of_study}</p>
-                    </div>
-                  )}
-                  {selectedEducation.grade && (
-                    <div>
-                      <p className="text-sm text-muted-foreground">Grade</p>
-                      <p className="font-medium">{selectedEducation.grade}</p>
-                    </div>
-                  )}
+                <div className="space-y-6">
+                  {education.map((edu) => (
+                    <Card key={edu.id} className="p-6">
+                      <div className="space-y-4">
+                        <div>
+                          <h4 className="font-semibold text-lg">{edu.degree}</h4>
+                          <p className="text-muted-foreground">{edu.institution_name}</p>
+                          <p className="text-primary text-sm mt-1">
+                            {formatPeriod(edu.start_date, edu.end_date)}
+                          </p>
+                        </div>
+                        {edu.field_of_study && (
+                          <div>
+                            <p className="text-sm text-muted-foreground">Field of Study</p>
+                            <p className="font-medium">{edu.field_of_study}</p>
+                          </div>
+                        )}
+                        {edu.grade && (
+                          <div>
+                            <p className="text-sm text-muted-foreground">Grade</p>
+                            <p className="font-medium">{edu.grade}</p>
+                          </div>
+                        )}
+                      </div>
+                    </Card>
+                  ))}
                 </div>
               </>
             )}
@@ -338,43 +327,50 @@ const DatabaseAboutSection = () => {
 
         {/* Experience Detail Modal */}
         <Dialog open={!!selectedExperience} onOpenChange={() => setSelectedExperience(null)}>
-          <DialogContent className="max-w-2xl">
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
             {selectedExperience && (
               <>
                 <DialogHeader>
                   <DialogTitle className="text-2xl font-display flex items-center gap-2">
                     <Briefcase className="w-6 h-6 text-primary" />
-                    {selectedExperience.position}
+                    Work Experience
                   </DialogTitle>
                 </DialogHeader>
-                <div className="space-y-4">
-                  <div>
-                    <h4 className="font-semibold text-lg">{selectedExperience.company_name}</h4>
-                    <p className="text-primary">
-                      {formatPeriod(selectedExperience.start_date, selectedExperience.end_date, selectedExperience.is_current)}
-                    </p>
-                    {selectedExperience.location && (
-                      <p className="text-muted-foreground">{selectedExperience.location}</p>
-                    )}
-                  </div>
-                  {selectedExperience.description && (
-                    <div>
-                      <p className="text-sm text-muted-foreground">Description</p>
-                      <p className="leading-relaxed whitespace-pre-line">{selectedExperience.description}</p>
-                    </div>
-                  )}
-                  {selectedExperience.technologies && selectedExperience.technologies.length > 0 && (
-                    <div>
-                      <p className="text-sm text-muted-foreground mb-2">Technologies Used</p>
-                      <div className="flex flex-wrap gap-2">
-                        {selectedExperience.technologies.map((tech, index) => (
-                          <Badge key={index} variant="secondary">
-                            {tech}
-                          </Badge>
-                        ))}
+                <div className="space-y-6">
+                  {experience.map((exp) => (
+                    <Card key={exp.id} className="p-6">
+                      <div className="space-y-4">
+                        <div>
+                          <h4 className="font-semibold text-lg">{exp.position}</h4>
+                          <p className="text-muted-foreground">{exp.company_name}</p>
+                          <p className="text-primary text-sm mt-1">
+                            {formatPeriod(exp.start_date, exp.end_date, exp.is_current)}
+                          </p>
+                          {exp.location && (
+                            <p className="text-muted-foreground text-sm">{exp.location}</p>
+                          )}
+                        </div>
+                        {exp.description && (
+                          <div>
+                            <p className="text-sm text-muted-foreground mb-1">Description</p>
+                            <p className="leading-relaxed whitespace-pre-line">{exp.description}</p>
+                          </div>
+                        )}
+                        {exp.technologies && exp.technologies.length > 0 && (
+                          <div>
+                            <p className="text-sm text-muted-foreground mb-2">Technologies Used</p>
+                            <div className="flex flex-wrap gap-2">
+                              {exp.technologies.map((tech, index) => (
+                                <Badge key={index} variant="secondary">
+                                  {tech}
+                                </Badge>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
-                    </div>
-                  )}
+                    </Card>
+                  ))}
                 </div>
               </>
             )}

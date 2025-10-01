@@ -1,8 +1,9 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Star, Quote } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { supabase } from '@/integrations/supabase/client';
+import { useScrollReveal } from '@/hooks/use-scroll-reveal';
 
 interface Testimonial {
   id: string;
@@ -19,7 +20,7 @@ const DatabaseTestimonialsSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const { isVisible, sectionRef } = useScrollReveal(600);
 
   useEffect(() => {
     fetchTestimonials();
@@ -117,7 +118,7 @@ const DatabaseTestimonialsSection = () => {
 
   return (
     <section 
-      className="py-20 relative overflow-hidden"
+      className={`py-20 relative overflow-hidden transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
       ref={sectionRef}
     >
       <div className="container mx-auto px-6">
