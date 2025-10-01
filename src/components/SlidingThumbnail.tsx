@@ -10,19 +10,17 @@ interface SlidingThumbnailProps {
 
 export const SlidingThumbnail = ({ images, alt, className = "", interval = 2000, startOnHover = false }: SlidingThumbnailProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
+    // Don't start slideshow if there's only one image
     if (images.length <= 1) return;
+    
+    // If startOnHover is true, only run when hovered
     if (startOnHover && !isHovered) return;
 
     const timer = setInterval(() => {
-      setIsTransitioning(true);
-      setTimeout(() => {
-        setCurrentIndex((prev) => (prev + 1) % images.length);
-        setIsTransitioning(false);
-      }, 500);
+      setCurrentIndex((prev) => (prev + 1) % images.length);
     }, interval);
 
     return () => clearInterval(timer);
@@ -41,33 +39,35 @@ export const SlidingThumbnail = ({ images, alt, className = "", interval = 2000,
   return (
     <div 
       className="relative w-full h-full overflow-hidden"
-      onMouseEnter={() => startOnHover && setIsHovered(true)}
+      onMouseEnter={() => {
+        if (startOnHover) {
+          setIsHovered(true);
+        }
+      }}
       onMouseLeave={() => {
         if (startOnHover) {
           setIsHovered(false);
           setCurrentIndex(0);
-          setIsTransitioning(false);
         }
       }}
     >
-      {images.map((image, index) => (
-        <img
-          key={index}
-          src={image || '/placeholder.svg'}
-          alt={`${alt} - ${index + 1}`}
-          className={`absolute inset-0 w-full h-full object-cover transition-transform duration-500 ${
-            index === currentIndex 
-              ? isTransitioning 
-                ? 'translate-x-[-100%]' 
-                : 'translate-x-0' 
-              : index === (currentIndex + 1) % images.length
-              ? isTransitioning
-                ? 'translate-x-0'
-                : 'translate-x-[100%]'
-              : 'translate-x-[100%]'
-          } ${className}`}
-        />
-      ))}
+      <div 
+        className="flex transition-transform duration-700 ease-in-out h-full"
+        style={{ 
+          transform: `translateX(-${currentIndex * 100}%)`,
+          width: `${images.length * 100}%`
+        }}
+      >
+        {images.map((image, index) => (
+          <img
+            key={index}
+            src={image || '/placeholder.svg'}
+            alt={`${alt} - ${index + 1}`}
+            className={`object-cover flex-shrink-0 ${className}`}
+            style={{ width: `${100 / images.length}%` }}
+          />
+        ))}
+      </div>
       {images.length > 1 && (
         <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-1 z-10">
           {images.map((_, index) => (
