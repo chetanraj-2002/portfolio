@@ -45,7 +45,6 @@ const DatabaseAboutSection = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedEducation, setSelectedEducation] = useState<Education | null>(null);
   const [selectedExperience, setSelectedExperience] = useState<Experience | null>(null);
-  const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -53,29 +52,7 @@ const DatabaseAboutSection = () => {
   }, []);
 
   useEffect(() => {
-    // Check if already visible on mount
-    if (sectionRef.current) {
-      const rect = sectionRef.current.getBoundingClientRect();
-      if (rect.top < window.innerHeight && rect.bottom > 0) {
-        setIsVisible(true);
-        return;
-      }
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => setIsVisible(true), 600);
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
+    fetchData();
   }, []);
 
   const fetchData = async () => {
@@ -151,7 +128,7 @@ const DatabaseAboutSection = () => {
   return (
     <section 
       id="about" 
-      className={`py-20 transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+      className="py-20"
       ref={sectionRef}
     >
       <div className="container mx-auto px-6">
@@ -165,7 +142,7 @@ const DatabaseAboutSection = () => {
         {/* Main Content Sections */}
         <div className="grid lg:grid-cols-3 gap-8 mb-12">
           {/* Skills Section */}
-          <Card className={`card-glass hover-lift transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '200ms' }}>
+          <Card className="card-glass hover-lift">
             <CardHeader 
               className="cursor-pointer"
               onClick={() => setShowSkillsModal(true)}
@@ -183,7 +160,7 @@ const DatabaseAboutSection = () => {
           </Card>
 
           {/* Education Section */}
-          <Card className={`card-glass hover-lift transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '400ms' }}>
+          <Card className="card-glass hover-lift">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <GraduationCap className="w-6 h-6 text-primary" />
@@ -212,7 +189,7 @@ const DatabaseAboutSection = () => {
           </Card>
 
           {/* Experience Section */}
-          <Card className={`card-glass hover-lift transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '600ms' }}>
+          <Card className="card-glass hover-lift">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Briefcase className="w-6 h-6 text-primary" />

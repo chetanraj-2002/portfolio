@@ -24,7 +24,6 @@ const DatabaseMediaSection = () => {
   const [loading, setLoading] = useState(true);
   const [selectedMedia, setSelectedMedia] = useState<MediaItem | null>(null);
   const [filter, setFilter] = useState<string>('all');
-  const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -32,29 +31,8 @@ const DatabaseMediaSection = () => {
   }, []);
 
   useEffect(() => {
-    if (sectionRef.current) {
-      const rect = sectionRef.current.getBoundingClientRect();
-      if (rect.top < window.innerHeight && rect.bottom > 0) {
-        setIsVisible(true);
-        return;
-      }
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => setIsVisible(true), 600);
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
+    filterMedia();
+  }, [mediaItems, filter]);
 
   useEffect(() => {
     filterMedia();
@@ -125,7 +103,7 @@ const DatabaseMediaSection = () => {
   return (
     <section 
       id="media" 
-      className={`py-20 transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+      className="py-20"
       ref={sectionRef}
     >
       <div className="container mx-auto px-6">
@@ -164,8 +142,7 @@ const DatabaseMediaSection = () => {
             return (
               <Card 
                 key={item.id} 
-                className={`card-glass hover-lift group cursor-pointer transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
-                style={{ transitionDelay: `${(index % 3) * 200 + 200}ms` }}
+                className="card-glass hover-lift group cursor-pointer"
               >
                 {/* Featured badge */}
                 {item.featured && (

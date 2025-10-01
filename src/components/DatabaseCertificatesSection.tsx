@@ -23,7 +23,6 @@ interface Certificate {
 const DatabaseCertificatesSection = () => {
   const [certificates, setCertificates] = useState<Certificate[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -31,28 +30,7 @@ const DatabaseCertificatesSection = () => {
   }, []);
 
   useEffect(() => {
-    if (sectionRef.current) {
-      const rect = sectionRef.current.getBoundingClientRect();
-      if (rect.top < window.innerHeight && rect.bottom > 0) {
-        setIsVisible(true);
-        return;
-      }
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => setIsVisible(true), 600);
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
+    fetchCertificates();
   }, []);
 
   const fetchCertificates = async () => {
@@ -138,7 +116,7 @@ const DatabaseCertificatesSection = () => {
   return (
     <section 
       id="certificates" 
-      className={`py-20 transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+      className="py-20"
       ref={sectionRef}
     >
       <div className="container mx-auto px-6">
@@ -153,8 +131,7 @@ const DatabaseCertificatesSection = () => {
           {certificates.map((certificate, index) => (
             <Card 
               key={certificate.id} 
-              className={`card-glass hover-lift overflow-hidden transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
-              style={{ transitionDelay: `${(index % 3) * 200 + 200}ms` }}
+              className="card-glass hover-lift overflow-hidden"
             >
               {certificate.certificate_image_url && (
                 <div className="aspect-video bg-muted">
