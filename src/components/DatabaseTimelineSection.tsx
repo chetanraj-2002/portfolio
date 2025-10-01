@@ -18,27 +18,11 @@ interface TimelineItem {
 const DatabaseTimelineSection = () => {
   const [timelineItems, setTimelineItems] = useState<TimelineItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetchTimelineData();
-    
-    // Intersection Observer for fade-in effect
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
   }, []);
 
   const fetchTimelineData = async () => {
@@ -135,9 +119,7 @@ const DatabaseTimelineSection = () => {
   return (
     <section 
       ref={sectionRef}
-      className={`py-20 relative overflow-hidden transition-opacity duration-1000 ${
-        isVisible ? 'opacity-100' : 'opacity-0'
-      }`}
+      className="py-20 relative overflow-hidden"
     >
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
