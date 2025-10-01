@@ -149,19 +149,28 @@ const DatabaseAboutSection = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {skills.slice(0, 3).map((skill) => (
-                  <div key={skill.id} className="flex items-center justify-between">
-                    <span className="text-sm font-medium">{skill.skill_name}</span>
-                    <Badge variant="outline" className="text-xs">{skill.category}</Badge>
-                  </div>
-                ))}
-                {skills.length > 3 && (
+                <div className="flex flex-wrap gap-2">
+                  {skills.slice(0, 6).map((skill) => (
+                    <div
+                      key={skill.id}
+                      className="px-3 py-1.5 bg-background border border-purple-300/30 text-sm font-medium rounded-full shadow-sm hover:shadow-purple-300/20 transition-all duration-300"
+                      style={{
+                        boxShadow: '0 0 8px rgba(147, 51, 234, 0.15), 0 2px 8px rgba(147, 51, 234, 0.08)',
+                        borderColor: 'hsl(262 83% 58% / 0.2)',
+                        background: 'linear-gradient(135deg, hsl(var(--background)), hsl(262 83% 98% / 0.5))'
+                      }}
+                    >
+                      {skill.skill_name}
+                    </div>
+                  ))}
+                </div>
+                {skills.length > 6 && (
                   <Button 
                     variant="ghost" 
                     className="w-full text-sm"
                     onClick={() => setShowSkillsModal(true)}
                   >
-                    View {skills.length - 3} more skills
+                    View {skills.length - 6} more skills
                   </Button>
                 )}
               </div>
@@ -253,49 +262,35 @@ const DatabaseAboutSection = () => {
             </DialogHeader>
             
             <div className="space-y-6">
-              <div className="flex items-center gap-4">
-                <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                  <SelectTrigger className="w-48">
-                    <SelectValue placeholder="Filter by category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Categories</SelectItem>
-                    {getUniqueCategories().map((category) => (
-                      <SelectItem key={category} value={category}>
-                        {category}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <span className="text-sm text-muted-foreground">
-                  {getFilteredSkills().length} skill{getFilteredSkills().length !== 1 ? 's' : ''}
-                </span>
-              </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {getFilteredSkills().map((skill) => (
-                  <Card key={skill.id} className="p-4 hover:shadow-md transition-shadow">
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <h4 className="font-semibold">{skill.skill_name}</h4>
-                        <Badge variant="outline">{skill.category}</Badge>
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="text-muted-foreground">Proficiency</span>
-                          <span className="font-medium">{getProficiencyLabel(skill.proficiency_level)}</span>
-                        </div>
-                        
-                        <div className="w-full bg-muted rounded-full h-2">
-                          <div 
-                            className={`h-2 rounded-full ${getSkillColor(skill.proficiency_level)} transition-all duration-500`}
-                            style={{ width: `${(skill.proficiency_level / 5) * 100}%` }}
-                          ></div>
-                        </div>
-                      </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {getUniqueCategories().map((category) => (
+                  <div key={category} className="space-y-3">
+                    <h4 className="font-semibold text-lg text-primary border-b border-primary/20 pb-1">
+                      {category}
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      {skills
+                        .filter(skill => skill.category === category)
+                        .map((skill) => (
+                          <div
+                            key={skill.id}
+                            className="px-4 py-2 bg-background border border-purple-300/30 text-sm font-medium rounded-full shadow-sm hover:shadow-purple-300/25 transition-all duration-300 cursor-default"
+                            style={{
+                              boxShadow: '0 0 12px rgba(147, 51, 234, 0.2), 0 4px 12px rgba(147, 51, 234, 0.1)',
+                              borderColor: 'hsl(262 83% 58% / 0.25)',
+                              background: 'linear-gradient(135deg, hsl(var(--background)), hsl(262 83% 98% / 0.6))'
+                            }}
+                            title={`${skill.skill_name} - ${getProficiencyLabel(skill.proficiency_level)}`}
+                          >
+                            <span>{skill.skill_name}</span>
+                            <span className="ml-2 text-xs text-purple-600 font-normal">
+                              {getProficiencyLabel(skill.proficiency_level)}
+                            </span>
+                          </div>
+                        ))}
                     </div>
-                  </Card>
+                  </div>
                 ))}
               </div>
             </div>
