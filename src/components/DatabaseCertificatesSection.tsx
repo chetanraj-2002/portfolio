@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Award, Calendar, ExternalLink, GraduationCap } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
-import { useScroll3D } from '@/hooks/use-scroll-3d';
 
 interface Certificate {
   id: string;
@@ -24,10 +23,28 @@ interface Certificate {
 const DatabaseCertificatesSection = () => {
   const [certificates, setCertificates] = useState<Certificate[]>([]);
   const [loading, setLoading] = useState(true);
-  const { ref, transform, isVisible } = useScroll3D();
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetchCertificates();
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => setIsVisible(true), 1000);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
   }, []);
 
   const fetchCertificates = async () => {
@@ -111,14 +128,12 @@ const DatabaseCertificatesSection = () => {
   }
 
   return (
-    <section id="certificates" className="py-20" ref={ref}>
-      <div 
-        className="container mx-auto px-6 scroll-3d"
-        style={{
-          transform: `perspective(2000px) rotateX(${transform.rotateX}deg) rotateY(${transform.rotateY}deg) scale(${transform.scale})`,
-          opacity: transform.opacity,
-        }}
-      >
+    <section 
+      id="certificates" 
+      className={`py-20 transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+      ref={sectionRef}
+    >
+      <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-gradient mb-4">Certifications & Achievements</h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -127,8 +142,12 @@ const DatabaseCertificatesSection = () => {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {certificates.map((certificate) => (
-            <Card key={certificate.id} className="card-glass hover-lift overflow-hidden">
+          {certificates.map((certificate, index) => (
+            <Card 
+              key={certificate.id} 
+              className={`card-glass hover-lift overflow-hidden transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+              style={{ transitionDelay: `${(index % 3) * 200 + 200}ms` }}
+            >
               {certificate.certificate_image_url && (
                 <div className="aspect-video bg-muted">
                   <img

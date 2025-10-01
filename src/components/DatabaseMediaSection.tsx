@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Play, Image as ImageIcon, Music, Eye, X } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -6,7 +6,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
-import { useScroll3D } from '@/hooks/use-scroll-3d';
 
 interface MediaItem {
   id: string;
@@ -25,10 +24,28 @@ const DatabaseMediaSection = () => {
   const [loading, setLoading] = useState(true);
   const [selectedMedia, setSelectedMedia] = useState<MediaItem | null>(null);
   const [filter, setFilter] = useState<string>('all');
-  const { ref, transform, isVisible } = useScroll3D();
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetchMediaItems();
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => setIsVisible(true), 1000);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
@@ -98,14 +115,12 @@ const DatabaseMediaSection = () => {
   }
 
   return (
-    <section id="media" className="py-20" ref={ref}>
-      <div 
-        className="container mx-auto px-6 scroll-3d"
-        style={{
-          transform: `perspective(2000px) rotateX(${transform.rotateX}deg) rotateY(${transform.rotateY}deg) scale(${transform.scale})`,
-          opacity: transform.opacity,
-        }}
-      >
+    <section 
+      id="media" 
+      className={`py-20 transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+      ref={sectionRef}
+    >
+      <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-gradient mb-4">Media Gallery</h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -141,8 +156,8 @@ const DatabaseMediaSection = () => {
             return (
               <Card 
                 key={item.id} 
-                className="card-glass hover-lift group cursor-pointer"
-                style={{ animationDelay: `${index * 100}ms` }}
+                className={`card-glass hover-lift group cursor-pointer transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+                style={{ transitionDelay: `${(index % 3) * 200 + 200}ms` }}
               >
                 {/* Featured badge */}
                 {item.featured && (

@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
 import { Code, Users, Award } from 'lucide-react';
-import { useScroll3D } from '@/hooks/use-scroll-3d';
 
 const StatsSection = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -11,7 +10,6 @@ const StatsSection = () => {
   });
   
   const sectionRef = useRef<HTMLDivElement>(null);
-  const { ref: scroll3dRef, transform, isVisible: is3DVisible } = useScroll3D();
 
   const stats = [
     {
@@ -41,10 +39,10 @@ const StatsSection = () => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setIsVisible(true);
+          setTimeout(() => setIsVisible(true), 1000);
         }
       },
-      { threshold: 0.3 }
+      { threshold: 0.1 }
     );
 
     if (sectionRef.current) {
@@ -78,21 +76,12 @@ const StatsSection = () => {
     });
   }, [isVisible]);
 
-  useEffect(() => {
-    if (scroll3dRef.current) {
-      sectionRef.current = scroll3dRef.current;
-    }
-  }, []);
-
   return (
-    <section ref={scroll3dRef} className="py-20 relative">
-      <div 
-        className="container mx-auto px-6 scroll-3d"
-        style={{
-          transform: `perspective(2000px) rotateX(${transform.rotateX}deg) rotateY(${transform.rotateY}deg) scale(${transform.scale})`,
-          opacity: transform.opacity,
-        }}
-      >
+    <section 
+      ref={sectionRef} 
+      className={`py-20 relative transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+    >
+      <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-display font-bold text-gradient mb-4">By the Numbers</h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -106,8 +95,8 @@ const StatsSection = () => {
             return (
               <div
                 key={index}
-                className="text-center space-y-4 group"
-                style={{ animationDelay: `${index * 200}ms` }}
+                className={`text-center space-y-4 group transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+                style={{ transitionDelay: `${index * 200 + 200}ms` }}
               >
                 <div className="mx-auto w-16 h-16 rounded-full bg-gradient-to-r from-primary to-accent flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                   <Icon className="w-8 h-8 text-white" />

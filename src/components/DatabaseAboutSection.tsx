@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Download, GraduationCap, Briefcase, Code, X, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -6,7 +6,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
-import { useScroll3D } from '@/hooks/use-scroll-3d';
 
 interface Skill {
   id: string;
@@ -47,10 +46,28 @@ const DatabaseAboutSection = () => {
   const [expandedSkills, setExpandedSkills] = useState(false);
   const [expandedEducation, setExpandedEducation] = useState(false);
   const [expandedExperience, setExpandedExperience] = useState(false);
-  const { ref, transform, isVisible } = useScroll3D();
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetchData();
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => setIsVisible(true), 1000);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
   }, []);
 
   const fetchData = async () => {
@@ -124,14 +141,12 @@ const DatabaseAboutSection = () => {
   }
 
   return (
-    <section id="about" className="py-20" ref={ref}>
-      <div 
-        className="container mx-auto px-6 scroll-3d"
-        style={{
-          transform: `perspective(2000px) rotateX(${transform.rotateX}deg) rotateY(${transform.rotateY}deg) scale(${transform.scale})`,
-          opacity: transform.opacity,
-        }}
-      >
+    <section 
+      id="about" 
+      className={`py-20 transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+      ref={sectionRef}
+    >
+      <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-gradient mb-4">About Me</h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -142,7 +157,7 @@ const DatabaseAboutSection = () => {
         {/* Main Content Sections */}
         <div className="grid lg:grid-cols-3 gap-8 mb-12">
           {/* Skills Section */}
-          <Card className="card-glass hover-lift">
+          <Card className={`card-glass hover-lift transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '200ms' }}>
             <CardHeader 
               className="cursor-pointer"
               onClick={() => setExpandedSkills(!expandedSkills)}
@@ -190,7 +205,7 @@ const DatabaseAboutSection = () => {
           </Card>
 
           {/* Education Section */}
-          <Card className="card-glass hover-lift">
+          <Card className={`card-glass hover-lift transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '400ms' }}>
             <CardHeader 
               className="cursor-pointer"
               onClick={() => setExpandedEducation(!expandedEducation)}
@@ -239,7 +254,7 @@ const DatabaseAboutSection = () => {
           </Card>
 
           {/* Experience Section */}
-          <Card className="card-glass hover-lift">
+          <Card className={`card-glass hover-lift transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '600ms' }}>
             <CardHeader 
               className="cursor-pointer"
               onClick={() => setExpandedExperience(!expandedExperience)}
