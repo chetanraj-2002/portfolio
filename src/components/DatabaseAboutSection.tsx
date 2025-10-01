@@ -53,29 +53,22 @@ const DatabaseAboutSection = () => {
   }, []);
 
   useEffect(() => {
-    // Check if element is already in viewport on mount
-    const checkInitialVisibility = () => {
-      if (sectionRef.current) {
-        const rect = sectionRef.current.getBoundingClientRect();
-        const isInViewport = rect.top < window.innerHeight && rect.bottom > 0;
-        if (isInViewport) {
-          setIsVisible(true);
-          return true;
-        }
+    // Check if already visible on mount
+    if (sectionRef.current) {
+      const rect = sectionRef.current.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        setIsVisible(true);
+        return;
       }
-      return false;
-    };
-
-    // If already visible, don't set up observer
-    if (checkInitialVisibility()) return;
+    }
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setTimeout(() => setIsVisible(true), 300);
+          setTimeout(() => setIsVisible(true), 600);
         }
       },
-      { threshold: 0.05 }
+      { threshold: 0.1 }
     );
 
     if (sectionRef.current) {
