@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight, Star, Quote } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { supabase } from '@/integrations/supabase/client';
+import { useScroll3D } from '@/hooks/use-scroll-3d';
 
 interface Testimonial {
   id: string;
@@ -19,6 +20,7 @@ const DatabaseTestimonialsSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
+  const { ref, transform } = useScroll3D();
 
   useEffect(() => {
     fetchTestimonials();
@@ -105,8 +107,13 @@ const DatabaseTestimonialsSection = () => {
   const currentTestimonial = testimonials[currentIndex];
 
   return (
-    <section className="py-20 relative overflow-hidden">
-      <div className="container mx-auto px-6">
+    <section className="py-20 relative overflow-hidden" ref={ref}>
+      <div 
+        className="container mx-auto px-6 scroll-3d"
+        style={{
+          transform: `perspective(1000px) rotateX(${transform.rotateX}deg) scale(${transform.scale})`,
+        }}
+      >
         <div className="text-center mb-16">
           <h2 className="text-4xl font-display font-bold text-gradient mb-4">Client Testimonials</h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">

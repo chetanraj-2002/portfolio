@@ -6,6 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
+import { useScroll3D } from '@/hooks/use-scroll-3d';
 
 interface MediaItem {
   id: string;
@@ -24,6 +25,7 @@ const DatabaseMediaSection = () => {
   const [loading, setLoading] = useState(true);
   const [selectedMedia, setSelectedMedia] = useState<MediaItem | null>(null);
   const [filter, setFilter] = useState<string>('all');
+  const { ref, transform } = useScroll3D();
 
   useEffect(() => {
     fetchMediaItems();
@@ -96,8 +98,13 @@ const DatabaseMediaSection = () => {
   }
 
   return (
-    <section id="media" className="py-20">
-      <div className="container mx-auto px-6">
+    <section id="media" className="py-20" ref={ref}>
+      <div 
+        className="container mx-auto px-6 scroll-3d"
+        style={{
+          transform: `perspective(1000px) rotateX(${transform.rotateX}deg) scale(${transform.scale})`,
+        }}
+      >
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-gradient mb-4">Media Gallery</h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">

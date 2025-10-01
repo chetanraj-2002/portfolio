@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
+import { useScroll3D } from '@/hooks/use-scroll-3d';
 
 interface Certificate {
   id: string;
@@ -23,6 +24,7 @@ interface Certificate {
 const DatabaseCertificatesSection = () => {
   const [certificates, setCertificates] = useState<Certificate[]>([]);
   const [loading, setLoading] = useState(true);
+  const { ref, transform } = useScroll3D();
 
   useEffect(() => {
     fetchCertificates();
@@ -109,8 +111,13 @@ const DatabaseCertificatesSection = () => {
   }
 
   return (
-    <section id="certificates" className="py-20">
-      <div className="container mx-auto px-6">
+    <section id="certificates" className="py-20" ref={ref}>
+      <div 
+        className="container mx-auto px-6 scroll-3d"
+        style={{
+          transform: `perspective(1000px) rotateX(${transform.rotateX}deg) scale(${transform.scale})`,
+        }}
+      >
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-gradient mb-4">Certifications & Achievements</h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">

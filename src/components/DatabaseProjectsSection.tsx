@@ -6,6 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
+import { useScroll3D } from '@/hooks/use-scroll-3d';
 
 interface Project {
   id: string;
@@ -26,6 +27,7 @@ const DatabaseProjectsSection = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [filter, setFilter] = useState<string>('all');
   const [showAll, setShowAll] = useState(false);
+  const { ref, transform } = useScroll3D();
 
   useEffect(() => {
     fetchProjects();
@@ -93,8 +95,13 @@ const DatabaseProjectsSection = () => {
   }
 
   return (
-    <section id="projects" className="py-20">
-      <div className="container mx-auto px-6">
+    <section id="projects" className="py-20" ref={ref}>
+      <div 
+        className="container mx-auto px-6 scroll-3d"
+        style={{
+          transform: `perspective(1000px) rotateX(${transform.rotateX}deg) scale(${transform.scale})`,
+        }}
+      >
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-gradient mb-4">My Projects</h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">

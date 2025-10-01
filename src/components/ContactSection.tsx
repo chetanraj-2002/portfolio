@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { useScroll3D } from '@/hooks/use-scroll-3d';
 
 const ContactSection = () => {
   const [formData, setFormData] = useState({
@@ -18,6 +19,7 @@ const ContactSection = () => {
   });
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const { ref, transform } = useScroll3D();
 
   const contactInfo = [
     {
@@ -96,8 +98,13 @@ const ContactSection = () => {
   };
 
   return (
-    <section id="contact" className="py-20">
-      <div className="container mx-auto px-6">
+    <section id="contact" className="py-20" ref={ref}>
+      <div 
+        className="container mx-auto px-6 scroll-3d"
+        style={{
+          transform: `perspective(1000px) rotateX(${transform.rotateX}deg) scale(${transform.scale})`,
+        }}
+      >
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-gradient mb-4">Get In Touch</h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">

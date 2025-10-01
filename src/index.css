@@ -350,11 +350,19 @@
   }
 
   @keyframes blink-caret {
-    from, to {
-      border-color: transparent;
-    }
-    50% {
-      border-color: hsl(var(--primary));
-    }
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
+  }
+
+  .animate-blink-caret {
+    animation: blink-caret 1s step-end infinite;
+    margin-left: 2px;
+    color: hsl(var(--primary));
+  }
+
+  .scroll-3d {
+    transform-style: preserve-3d;
+    perspective: 1000px;
+    transition: transform 0.3s ease-out;
   }
 }

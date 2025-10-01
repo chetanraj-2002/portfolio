@@ -6,6 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
+import { useScroll3D } from '@/hooks/use-scroll-3d';
 
 interface Skill {
   id: string;
@@ -46,6 +47,7 @@ const DatabaseAboutSection = () => {
   const [expandedSkills, setExpandedSkills] = useState(false);
   const [expandedEducation, setExpandedEducation] = useState(false);
   const [expandedExperience, setExpandedExperience] = useState(false);
+  const { ref, transform } = useScroll3D();
 
   useEffect(() => {
     fetchData();
@@ -122,8 +124,13 @@ const DatabaseAboutSection = () => {
   }
 
   return (
-    <section id="about" className="py-20">
-      <div className="container mx-auto px-6">
+    <section id="about" className="py-20" ref={ref}>
+      <div 
+        className="container mx-auto px-6 scroll-3d"
+        style={{
+          transform: `perspective(1000px) rotateX(${transform.rotateX}deg) scale(${transform.scale})`,
+        }}
+      >
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-gradient mb-4">About Me</h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">

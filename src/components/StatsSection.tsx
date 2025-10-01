@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Code, Users, Award } from 'lucide-react';
+import { useScroll3D } from '@/hooks/use-scroll-3d';
 
 const StatsSection = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -10,6 +11,7 @@ const StatsSection = () => {
   });
   
   const sectionRef = useRef<HTMLDivElement>(null);
+  const { ref: scroll3dRef, transform } = useScroll3D();
 
   const stats = [
     {
@@ -76,9 +78,20 @@ const StatsSection = () => {
     });
   }, [isVisible]);
 
+  useEffect(() => {
+    if (scroll3dRef.current) {
+      sectionRef.current = scroll3dRef.current;
+    }
+  }, []);
+
   return (
-    <section ref={sectionRef} className="py-20 relative">
-      <div className="container mx-auto px-6">
+    <section ref={scroll3dRef} className="py-20 relative">
+      <div 
+        className="container mx-auto px-6 scroll-3d"
+        style={{
+          transform: `perspective(1000px) rotateX(${transform.rotateX}deg) scale(${transform.scale})`,
+        }}
+      >
         <div className="text-center mb-16">
           <h2 className="text-4xl font-display font-bold text-gradient mb-4">By the Numbers</h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">

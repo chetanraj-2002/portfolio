@@ -18,21 +18,37 @@ interface AdminProfile {
 const HeroSection = () => {
   const [text, setText] = useState('');
   const [adminProfile, setAdminProfile] = useState<AdminProfile | null>(null);
-  const fullText = 'Creative Developer';
+  const titles = ['Cloud Engineer', 'Full Stack Developer', 'Database Engineer'];
+  const [currentTitleIndex, setCurrentTitleIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
   
   useEffect(() => {
-    let index = 0;
-    const timer = setInterval(() => {
-      if (index < fullText.length) {
-        setText(fullText.slice(0, index + 1));
-        index++;
-      } else {
-        clearInterval(timer);
-      }
-    }, 100);
-    
-    return () => clearInterval(timer);
-  }, []);
+    const currentTitle = titles[currentTitleIndex];
+    let timeout: NodeJS.Timeout;
+
+    if (!isDeleting && text === currentTitle) {
+      // Pause before starting to delete
+      timeout = setTimeout(() => setIsDeleting(true), 2000);
+    } else if (isDeleting && text === '') {
+      // Move to next title after deletion
+      setIsDeleting(false);
+      setCurrentTitleIndex((prev) => (prev + 1) % titles.length);
+    } else {
+      // Type or delete one character
+      const typingSpeed = isDeleting ? 50 : 100;
+      timeout = setTimeout(() => {
+        setText(current => {
+          if (isDeleting) {
+            return current.slice(0, -1);
+          } else {
+            return currentTitle.slice(0, current.length + 1);
+          }
+        });
+      }, typingSpeed);
+    }
+
+    return () => clearTimeout(timeout);
+  }, [text, isDeleting, currentTitleIndex]);
 
   useEffect(() => {
     fetchAdminProfile();
@@ -116,7 +132,10 @@ const HeroSection = () => {
               </h1>
               
               <div className="text-2xl lg:text-3xl font-medium text-muted-foreground min-h-[40px]">
-                <span className="typewriter">{adminProfile?.title || text}</span>
+                <span className="typewriter">
+                  {adminProfile?.title || text}
+                  <span className="animate-blink-caret">|</span>
+                </span>
               </div>
               
               <p className="text-lg text-muted-foreground max-w-lg leading-relaxed">
