@@ -128,7 +128,7 @@ const DatabaseProjectsSection = () => {
   return (
     <section 
       id="projects" 
-      className={`py-20 transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+      className="py-20"
       ref={sectionRef}
     >
       <div className="container mx-auto px-6">
@@ -162,8 +162,7 @@ const DatabaseProjectsSection = () => {
           {displayedProjects.map((project, index) => (
             <Card 
               key={project.id} 
-              className={`card-glass hover-lift group relative overflow-hidden transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
-              style={{ transitionDelay: `${(index % 3) * 200 + 200}ms` }}
+              className="card-glass hover-lift group relative overflow-hidden"
             >
               {/* Featured badge */}
               {project.featured && (

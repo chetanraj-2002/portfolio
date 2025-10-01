@@ -131,7 +131,7 @@ const ContactSection = () => {
   return (
     <section 
       id="contact" 
-      className={`py-20 transition-opacity duration-1000 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
+      className="py-20"
       ref={sectionRef}
     >
       <div className="container mx-auto px-6">

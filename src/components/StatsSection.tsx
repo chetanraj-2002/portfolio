@@ -93,7 +93,7 @@ const StatsSection = () => {
   return (
     <section 
       ref={sectionRef} 
-      className={`py-20 relative transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+      className="py-20 relative"
     >
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
@@ -109,8 +109,7 @@ const StatsSection = () => {
             return (
               <div
                 key={index}
-                className={`text-center space-y-4 group transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
-                style={{ transitionDelay: `${index * 200 + 200}ms` }}
+                className="text-center space-y-4 group"
               >
                 <div className="mx-auto w-16 h-16 rounded-full bg-gradient-to-r from-primary to-accent flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                   <Icon className="w-8 h-8 text-white" />

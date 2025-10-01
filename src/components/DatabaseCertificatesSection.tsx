@@ -144,7 +144,7 @@ const DatabaseCertificatesSection = () => {
   return (
     <section 
       id="certificates" 
-      className={`py-20 transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+      className="py-20"
       ref={sectionRef}
     >
       <div className="container mx-auto px-6">
@@ -159,8 +159,7 @@ const DatabaseCertificatesSection = () => {
           {certificates.map((certificate, index) => (
             <Card 
               key={certificate.id} 
-              className={`card-glass hover-lift overflow-hidden transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
-              style={{ transitionDelay: `${(index % 3) * 200 + 200}ms` }}
+              className="card-glass hover-lift overflow-hidden"
             >
               {certificate.certificate_image_url && (
                 <div className="aspect-video bg-muted">

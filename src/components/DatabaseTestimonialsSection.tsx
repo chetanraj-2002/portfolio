@@ -139,7 +139,7 @@ const DatabaseTestimonialsSection = () => {
 
   return (
     <section 
-      className={`py-20 relative overflow-hidden transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+      className="py-20 relative overflow-hidden"
       ref={sectionRef}
     >
       <div className="container mx-auto px-6">

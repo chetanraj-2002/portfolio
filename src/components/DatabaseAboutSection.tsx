@@ -159,7 +159,7 @@ const DatabaseAboutSection = () => {
   return (
     <section 
       id="about" 
-      className={`py-20 transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+      className="py-20"
       ref={sectionRef}
     >
       <div className="container mx-auto px-6">
@@ -173,7 +173,7 @@ const DatabaseAboutSection = () => {
         {/* Main Content Sections */}
         <div className="grid lg:grid-cols-3 gap-8 mb-12">
           {/* Skills Section */}
-          <Card className={`card-glass hover-lift transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '200ms' }}>
+          <Card className="card-glass hover-lift">
             <CardHeader 
               className="cursor-pointer"
               onClick={() => setExpandedSkills(!expandedSkills)}
@@ -221,7 +221,7 @@ const DatabaseAboutSection = () => {
           </Card>
 
           {/* Education Section */}
-          <Card className={`card-glass hover-lift transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '400ms' }}>
+          <Card className="card-glass hover-lift">
             <CardHeader 
               className="cursor-pointer"
               onClick={() => setExpandedEducation(!expandedEducation)}
@@ -270,7 +270,7 @@ const DatabaseAboutSection = () => {
           </Card>
 
           {/* Experience Section */}
-          <Card className={`card-glass hover-lift transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '600ms' }}>
+          <Card className="card-glass hover-lift">
             <CardHeader 
               className="cursor-pointer"
               onClick={() => setExpandedExperience(!expandedExperience)}
