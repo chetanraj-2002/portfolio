@@ -51,23 +51,20 @@ export const SlidingThumbnail = ({ images, alt, className = "", interval = 2000,
         }
       }}
     >
-      <div 
-        className="flex transition-transform duration-700 ease-in-out h-full"
-        style={{ 
-          transform: `translateX(-${currentIndex * 100}%)`,
-          width: `${images.length * 100}%`
-        }}
-      >
-        {images.map((image, index) => (
-          <img
-            key={index}
-            src={image || '/placeholder.svg'}
-            alt={`${alt} - ${index + 1}`}
-            className={`object-cover flex-shrink-0 ${className}`}
-            style={{ width: `${100 / images.length}%` }}
-          />
-        ))}
-      </div>
+      {images.map((image, index) => (
+        <img
+          key={index}
+          src={image || '/placeholder.svg'}
+          alt={`${alt} - ${index + 1}`}
+          className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-in-out ${className} ${
+            index === currentIndex 
+              ? 'opacity-100 translate-x-0' 
+              : index < currentIndex
+              ? 'opacity-0 -translate-x-full'
+              : 'opacity-0 translate-x-full'
+          }`}
+        />
+      ))}
       {images.length > 1 && (
         <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-1 z-10">
           {images.map((_, index) => (
