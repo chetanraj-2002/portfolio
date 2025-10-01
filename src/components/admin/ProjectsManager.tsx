@@ -13,6 +13,7 @@ interface Project {
   demo_link: string;
   repo_link: string;
   technologies: string[] | string;
+  gallery_images: string[] | string;
   status: string;
   featured: boolean;
   start_date: string;
@@ -32,6 +33,7 @@ export const ProjectsManager = () => {
     demo_link: '',
     repo_link: '',
     technologies: [],
+    gallery_images: [],
     status: 'completed',
     featured: false,
     start_date: '',
@@ -102,7 +104,10 @@ export const ProjectsManager = () => {
         end_date: formData.end_date || null, // Convert empty string to null
         technologies: Array.isArray(formData.technologies) 
           ? formData.technologies 
-          : String(formData.technologies || '').split(',').map(t => t.trim())
+          : String(formData.technologies || '').split(',').map(t => t.trim()),
+        gallery_images: Array.isArray(formData.gallery_images) 
+          ? formData.gallery_images 
+          : []
       };
 
       if (editingItem?.id) {
@@ -170,6 +175,7 @@ export const ProjectsManager = () => {
       demo_link: '',
       repo_link: '',
       technologies: [],
+      gallery_images: [],
       status: 'completed',
       featured: false,
       start_date: '',
@@ -186,7 +192,8 @@ export const ProjectsManager = () => {
       ...item,
       technologies: Array.isArray(item.technologies) 
         ? item.technologies.join(', ') 
-        : String(item.technologies || '')
+        : String(item.technologies || ''),
+      gallery_images: Array.isArray(item.gallery_images) ? item.gallery_images : []
     });
     setShowForm(true);
   };
@@ -226,7 +233,8 @@ export const ProjectsManager = () => {
   const formFields = [
     { name: 'title', label: 'Project Title', type: 'text' as const, required: true },
     { name: 'description', label: 'Description', type: 'textarea' as const, required: true },
-    { name: 'image_url', label: 'Project Image', type: 'file' as const },
+    { name: 'image_url', label: 'Main Project Image', type: 'file' as const },
+    { name: 'gallery_images', label: 'Gallery Images (Multiple)', type: 'multifile' as const },
     { name: 'demo_link', label: 'Demo Link', type: 'url' as const },
     { name: 'repo_link', label: 'Repository Link', type: 'url' as const },
     { name: 'technologies', label: 'Technologies (comma-separated)', type: 'text' as const },

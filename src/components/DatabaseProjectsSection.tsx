@@ -17,6 +17,7 @@ interface Project {
   repo_link?: string;
   technologies: string[];
   status: string;
+  gallery_images?: string[];
   featured: boolean;
 }
 
@@ -135,10 +136,10 @@ const DatabaseProjectsSection = () => {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {displayedProjects.map((project, index) => {
-            // Create array of images for sliding (use same image multiple times if only one)
-            const projectImages = project.technologies && project.technologies.length > 0
-              ? [project.image_url, ...project.technologies.map(() => project.image_url)].slice(0, 5)
-              : [project.image_url];
+            // Use gallery_images if available, otherwise fallback to image_url
+            const projectImages = project.gallery_images && project.gallery_images.length > 0
+              ? project.gallery_images
+              : [project.image_url || '/placeholder.svg'];
 
             return (
               <Card

@@ -13,6 +13,7 @@ interface Media {
   media_type: string;
   thumbnail_url: string;
   tags: string[] | string;
+  gallery_images: string[] | string;
   featured: boolean;
   order_index: number;
 }
@@ -29,6 +30,7 @@ export const MediaManager = () => {
     media_type: 'image',
     thumbnail_url: '',
     tags: [],
+    gallery_images: [],
     featured: false,
     order_index: 0
   });
@@ -83,7 +85,10 @@ export const MediaManager = () => {
         admin_id: adminProfile.id,
         tags: Array.isArray(formData.tags) 
           ? formData.tags 
-          : String(formData.tags || '').split(',').map(t => t.trim())
+          : String(formData.tags || '').split(',').map(t => t.trim()),
+        gallery_images: Array.isArray(formData.gallery_images) 
+          ? formData.gallery_images 
+          : []
       };
 
       if (editingItem?.id) {
@@ -151,6 +156,7 @@ export const MediaManager = () => {
       media_type: 'image',
       thumbnail_url: '',
       tags: [],
+      gallery_images: [],
       featured: false,
       order_index: 0
     });
@@ -162,7 +168,8 @@ export const MediaManager = () => {
     setEditingItem(item);
     setFormData({
       ...item,
-      tags: Array.isArray(item.tags) ? item.tags.join(', ') : String(item.tags || '')
+      tags: Array.isArray(item.tags) ? item.tags.join(', ') : String(item.tags || ''),
+      gallery_images: Array.isArray(item.gallery_images) ? item.gallery_images : []
     });
     setShowForm(true);
   };
@@ -200,7 +207,7 @@ export const MediaManager = () => {
   const formFields = [
     { name: 'title', label: 'Title', type: 'text' as const, required: true },
     { name: 'description', label: 'Description', type: 'textarea' as const },
-    { name: 'media_url', label: 'Media File', type: 'file' as const, required: true },
+    { name: 'media_url', label: 'Main Media File', type: 'file' as const, required: true },
     { 
       name: 'media_type', 
       label: 'Media Type', 
@@ -212,6 +219,7 @@ export const MediaManager = () => {
       ]
     },
     { name: 'thumbnail_url', label: 'Thumbnail Image', type: 'file' as const },
+    { name: 'gallery_images', label: 'Gallery Images (Multiple)', type: 'multifile' as const },
     { name: 'tags', label: 'Tags (comma-separated)', type: 'text' as const },
     { name: 'featured', label: 'Featured Media', type: 'switch' as const },
     { name: 'order_index', label: 'Display Order', type: 'number' as const }

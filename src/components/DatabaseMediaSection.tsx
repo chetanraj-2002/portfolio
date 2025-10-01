@@ -16,6 +16,7 @@ interface MediaItem {
   media_type: string;
   thumbnail_url?: string;
   tags: string[];
+  gallery_images?: string[];
   featured: boolean;
 }
 
@@ -141,9 +142,9 @@ const DatabaseMediaSection = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {displayedMedia.map((item, index) => {
             const Icon = getMediaIcon(item.media_type);
-            // Get multiple images if available (from tags or use same image)
-            const thumbnails = item.tags && item.tags.length > 0 
-              ? [item.thumbnail_url || item.media_url, ...item.tags.map(() => item.thumbnail_url || item.media_url)].slice(0, 5)
+            // Use gallery_images if available, otherwise fallback to thumbnail/media_url
+            const thumbnails = item.gallery_images && item.gallery_images.length > 0
+              ? item.gallery_images
               : [item.thumbnail_url || item.media_url];
 
             return (
@@ -248,15 +249,8 @@ const DatabaseMediaSection = () => {
             {selectedMedia && (
               <>
                 <DialogHeader>
-                  <DialogTitle className="text-2xl font-display flex items-center justify-between">
-                    <span>{selectedMedia.title}</span>
-                    <Button 
-                      variant="ghost" 
-                      size="sm"
-                      onClick={() => setSelectedMedia(null)}
-                    >
-                      <X className="w-4 h-4" />
-                    </Button>
+                  <DialogTitle className="text-2xl font-display">
+                    {selectedMedia.title}
                   </DialogTitle>
                 </DialogHeader>
                 

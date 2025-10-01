@@ -221,6 +221,7 @@ export type Database = {
           created_at: string
           description: string | null
           featured: boolean | null
+          gallery_images: string[] | null
           id: string
           media_type: string
           media_url: string
@@ -235,6 +236,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           featured?: boolean | null
+          gallery_images?: string[] | null
           id?: string
           media_type: string
           media_url: string
@@ -249,6 +251,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           featured?: boolean | null
+          gallery_images?: string[] | null
           id?: string
           media_type?: string
           media_url?: string
@@ -268,6 +271,7 @@ export type Database = {
           description: string
           end_date: string | null
           featured: boolean | null
+          gallery_images: string[] | null
           id: string
           image_url: string | null
           order_index: number | null
@@ -285,6 +289,7 @@ export type Database = {
           description: string
           end_date?: string | null
           featured?: boolean | null
+          gallery_images?: string[] | null
           id?: string
           image_url?: string | null
           order_index?: number | null
@@ -302,6 +307,7 @@ export type Database = {
           description?: string
           end_date?: string | null
           featured?: boolean | null
+          gallery_images?: string[] | null
           id?: string
           image_url?: string | null
           order_index?: number | null

@@ -13,11 +13,12 @@ import {
 import { Switch } from '@/components/ui/switch';
 import { X } from 'lucide-react';
 import { FileUpload } from '@/components/FileUpload';
+import { MultiFileUpload } from '@/components/MultiFileUpload';
 
 interface Field {
   name: string;
   label: string;
-  type: 'text' | 'textarea' | 'date' | 'select' | 'switch' | 'number' | 'email' | 'url' | 'file';
+  type: 'text' | 'textarea' | 'date' | 'select' | 'switch' | 'number' | 'email' | 'url' | 'file' | 'multifile';
   options?: { value: string; label: string }[];
   required?: boolean;
   placeholder?: string;
@@ -86,6 +87,15 @@ export const AdminForm = ({
             onFileUploaded={(url) => onChange(field.name, url)}
             currentFile={value}
             placeholder="Upload file"
+          />
+        );
+      
+      case 'multifile':
+        return (
+          <MultiFileUpload
+            onFilesUploaded={(urls) => onChange(field.name, urls)}
+            currentFiles={Array.isArray(value) ? value : []}
+            placeholder="Upload multiple files"
           />
         );
       

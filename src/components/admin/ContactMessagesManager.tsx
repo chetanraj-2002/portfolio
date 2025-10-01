@@ -194,15 +194,8 @@ export const ContactMessagesManager = () => {
           {selectedMessage && (
             <>
               <DialogHeader>
-                <DialogTitle className="text-xl font-display flex items-center justify-between">
-                  <span>Contact Message</span>
-                  <Button 
-                    variant="ghost" 
-                    size="sm"
-                    onClick={() => setSelectedMessage(null)}
-                  >
-                    <X className="w-4 h-4" />
-                  </Button>
+                <DialogTitle className="text-xl font-display">
+                  Contact Message
                 </DialogTitle>
               </DialogHeader>
               

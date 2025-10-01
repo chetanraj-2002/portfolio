@@ -148,13 +148,23 @@ const DatabaseAboutSection = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <Button 
-                variant="outline" 
-                className="w-full"
-                onClick={() => setShowSkillsModal(true)}
-              >
-                View All Skills
-              </Button>
+              <div className="space-y-3">
+                {skills.slice(0, 3).map((skill) => (
+                  <div key={skill.id} className="flex items-center justify-between">
+                    <span className="text-sm font-medium">{skill.skill_name}</span>
+                    <Badge variant="outline" className="text-xs">{skill.category}</Badge>
+                  </div>
+                ))}
+                {skills.length > 3 && (
+                  <Button 
+                    variant="ghost" 
+                    className="w-full text-sm"
+                    onClick={() => setShowSkillsModal(true)}
+                  >
+                    View {skills.length - 3} more skills
+                  </Button>
+                )}
+              </div>
             </CardContent>
           </Card>
 
@@ -167,13 +177,23 @@ const DatabaseAboutSection = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <Button 
-                variant="outline" 
-                className="w-full"
-                onClick={() => setSelectedEducation({ all: true } as any)}
-              >
-                View All Education
-              </Button>
+              <div className="space-y-3">
+                {education.slice(0, 2).map((edu) => (
+                  <div key={edu.id} className="border-b border-border/50 pb-2 last:border-0">
+                    <h4 className="font-semibold text-sm">{edu.degree}</h4>
+                    <p className="text-muted-foreground text-xs">{edu.institution_name}</p>
+                  </div>
+                ))}
+                {education.length > 2 && (
+                  <Button 
+                    variant="ghost" 
+                    className="w-full text-sm"
+                    onClick={() => setSelectedEducation({ all: true } as any)}
+                  >
+                    View {education.length - 2} more
+                  </Button>
+                )}
+              </div>
             </CardContent>
           </Card>
 
@@ -186,13 +206,23 @@ const DatabaseAboutSection = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <Button 
-                variant="outline" 
-                className="w-full"
-                onClick={() => setSelectedExperience({ all: true } as any)}
-              >
-                View All Experience
-              </Button>
+              <div className="space-y-3">
+                {experience.slice(0, 2).map((exp) => (
+                  <div key={exp.id} className="border-b border-border/50 pb-2 last:border-0">
+                    <h4 className="font-semibold text-sm">{exp.position}</h4>
+                    <p className="text-muted-foreground text-xs">{exp.company_name}</p>
+                  </div>
+                ))}
+                {experience.length > 2 && (
+                  <Button 
+                    variant="ghost" 
+                    className="w-full text-sm"
+                    onClick={() => setSelectedExperience({ all: true } as any)}
+                  >
+                    View {experience.length - 2} more
+                  </Button>
+                )}
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -217,15 +247,8 @@ const DatabaseAboutSection = () => {
         <Dialog open={showSkillsModal} onOpenChange={setShowSkillsModal}>
           <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle className="text-2xl font-display flex items-center justify-between">
-                <span>Technical Skills</span>
-                <Button 
-                  variant="ghost" 
-                  size="sm"
-                  onClick={() => setShowSkillsModal(false)}
-                >
-                  <X className="w-4 h-4" />
-                </Button>
+              <DialogTitle className="text-2xl font-display">
+                Technical Skills
               </DialogTitle>
             </DialogHeader>
             

@@ -9,12 +9,17 @@ interface SlidingThumbnailProps {
 
 export const SlidingThumbnail = ({ images, alt, className = "", interval = 2000 }: SlidingThumbnailProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
     if (images.length <= 1) return;
 
     const timer = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % images.length);
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setCurrentIndex((prev) => (prev + 1) % images.length);
+        setIsTransitioning(false);
+      }, 500);
     }, interval);
 
     return () => clearInterval(timer);
@@ -37,8 +42,16 @@ export const SlidingThumbnail = ({ images, alt, className = "", interval = 2000 
           key={index}
           src={image || '/placeholder.svg'}
           alt={`${alt} - ${index + 1}`}
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
-            index === currentIndex ? 'opacity-100' : 'opacity-0'
+          className={`absolute inset-0 w-full h-full object-cover transition-transform duration-500 ${
+            index === currentIndex 
+              ? isTransitioning 
+                ? 'translate-x-[-100%]' 
+                : 'translate-x-0' 
+              : index === (currentIndex + 1) % images.length
+              ? isTransitioning
+                ? 'translate-x-0'
+                : 'translate-x-[100%]'
+              : 'translate-x-[100%]'
           } ${className}`}
         />
       ))}
