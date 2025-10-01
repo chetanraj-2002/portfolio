@@ -16,23 +16,23 @@ const StatsSection = () => {
   const stats = [
     {
       icon: Code,
-      target: 50,
+      target: 20,
       label: 'Projects Completed',
       suffix: '+',
       key: 'projects' as keyof typeof counts
     },
     {
       icon: Users,
-      target: 25,
+      target: 50,
       label: 'Happy Clients',
       suffix: '+',
       key: 'clients' as keyof typeof counts
     },
     {
       icon: Award,
-      target: 5,
+      target: 10,
       label: 'Awards Won',
-      suffix: '',
+      suffix: '+',
       key: 'awards' as keyof typeof counts
     }
   ];

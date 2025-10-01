@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { useScroll3D } from '@/hooks/use-scroll-3d';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const ContactSection = () => {
   const [formData, setFormData] = useState({
@@ -20,6 +21,7 @@ const ContactSection = () => {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const { ref, transform, isVisible } = useScroll3D();
+  const isMobile = useIsMobile();
 
   const contactInfo = [
     {
@@ -101,7 +103,7 @@ const ContactSection = () => {
     <section id="contact" className="py-20" ref={ref}>
       <div 
         className="container mx-auto px-6 scroll-3d"
-        style={{
+        style={isMobile ? {} : {
           transform: `perspective(2000px) rotateX(${transform.rotateX}deg) rotateY(${transform.rotateY}deg) scale(${transform.scale})`,
           opacity: transform.opacity,
         }}
