@@ -142,10 +142,12 @@ const DatabaseMediaSection = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {displayedMedia.map((item, index) => {
             const Icon = getMediaIcon(item.media_type);
-            // Use gallery_images if available, otherwise fallback to thumbnail/media_url
-            const thumbnails = item.gallery_images && item.gallery_images.length > 0
-              ? item.gallery_images
-              : [item.thumbnail_url || item.media_url];
+            // Main thumbnail/media_url first, then gallery images
+            const thumbnails = item.thumbnail_url || item.media_url
+              ? [item.thumbnail_url || item.media_url, ...(item.gallery_images || [])]
+              : item.gallery_images && item.gallery_images.length > 0 
+                ? item.gallery_images 
+                : ['/placeholder.svg'];
 
             return (
               <Card 
@@ -166,6 +168,7 @@ const DatabaseMediaSection = () => {
                     images={thumbnails}
                     alt={item.title}
                     className="transition-transform duration-300 group-hover:scale-110"
+                    startOnHover={true}
                   />
                   <div className="absolute inset-0 bg-background/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                     <div className="flex gap-3">

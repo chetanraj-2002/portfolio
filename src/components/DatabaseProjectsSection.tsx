@@ -136,10 +136,12 @@ const DatabaseProjectsSection = () => {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {displayedProjects.map((project, index) => {
-            // Use gallery_images if available, otherwise fallback to image_url
-            const projectImages = project.gallery_images && project.gallery_images.length > 0
-              ? project.gallery_images
-              : [project.image_url || '/placeholder.svg'];
+            // Main image first, then gallery images
+            const projectImages = project.image_url 
+              ? [project.image_url, ...(project.gallery_images || [])]
+              : project.gallery_images && project.gallery_images.length > 0 
+                ? project.gallery_images 
+                : ['/placeholder.svg'];
 
             return (
               <Card
@@ -160,6 +162,7 @@ const DatabaseProjectsSection = () => {
                     images={projectImages}
                     alt={project.title}
                     className="transition-all duration-500 group-hover:scale-110"
+                    startOnHover={true}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   

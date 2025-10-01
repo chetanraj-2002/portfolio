@@ -5,14 +5,17 @@ interface SlidingThumbnailProps {
   alt: string;
   className?: string;
   interval?: number;
+  startOnHover?: boolean;
 }
 
-export const SlidingThumbnail = ({ images, alt, className = "", interval = 2000 }: SlidingThumbnailProps) => {
+export const SlidingThumbnail = ({ images, alt, className = "", interval = 2000, startOnHover = false }: SlidingThumbnailProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     if (images.length <= 1) return;
+    if (startOnHover && !isHovered) return;
 
     const timer = setInterval(() => {
       setIsTransitioning(true);
@@ -23,7 +26,7 @@ export const SlidingThumbnail = ({ images, alt, className = "", interval = 2000 
     }, interval);
 
     return () => clearInterval(timer);
-  }, [images.length, interval]);
+  }, [images.length, interval, startOnHover, isHovered]);
 
   if (images.length === 0) {
     return (
@@ -36,7 +39,17 @@ export const SlidingThumbnail = ({ images, alt, className = "", interval = 2000 
   }
 
   return (
-    <div className="relative w-full h-full overflow-hidden">
+    <div 
+      className="relative w-full h-full overflow-hidden"
+      onMouseEnter={() => startOnHover && setIsHovered(true)}
+      onMouseLeave={() => {
+        if (startOnHover) {
+          setIsHovered(false);
+          setCurrentIndex(0);
+          setIsTransitioning(false);
+        }
+      }}
+    >
       {images.map((image, index) => (
         <img
           key={index}
