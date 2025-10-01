@@ -45,6 +45,7 @@ const DatabaseAboutSection = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedEducation, setSelectedEducation] = useState<Education | null>(null);
   const [selectedExperience, setSelectedExperience] = useState<Experience | null>(null);
+  const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
 
   useEffect(() => {
     fetchData();
@@ -151,17 +152,16 @@ const DatabaseAboutSection = () => {
               <div className="space-y-3">
                 <div className="flex flex-wrap gap-2">
                   {skills.slice(0, 6).map((skill) => (
-                    <div
+                    <button
                       key={skill.id}
-                      className="px-3 py-1.5 bg-background border border-purple-300/30 text-sm font-medium rounded-full shadow-sm hover:shadow-purple-300/20 transition-all duration-300"
+                      onClick={() => setSelectedSkill(skill)}
+                      className="px-3 py-1.5 bg-black text-white text-sm font-medium rounded-full transition-all duration-300 hover:scale-105 cursor-pointer"
                       style={{
-                        boxShadow: '0 0 8px rgba(147, 51, 234, 0.15), 0 2px 8px rgba(147, 51, 234, 0.08)',
-                        borderColor: 'hsl(262 83% 58% / 0.2)',
-                        background: 'linear-gradient(135deg, hsl(var(--background)), hsl(262 83% 98% / 0.5))'
+                        boxShadow: '0 0 0 1px rgba(147, 51, 234, 0.3) inset, 0 0 12px rgba(147, 51, 234, 0.4), 0 0 20px rgba(147, 51, 234, 0.2)'
                       }}
                     >
                       {skill.skill_name}
-                    </div>
+                    </button>
                   ))}
                 </div>
                 {skills.length > 6 && (
@@ -273,21 +273,16 @@ const DatabaseAboutSection = () => {
                       {skills
                         .filter(skill => skill.category === category)
                         .map((skill) => (
-                          <div
+                          <button
                             key={skill.id}
-                            className="px-4 py-2 bg-background border border-purple-300/30 text-sm font-medium rounded-full shadow-sm hover:shadow-purple-300/25 transition-all duration-300 cursor-default"
+                            onClick={() => setSelectedSkill(skill)}
+                            className="px-4 py-2 bg-black text-white text-sm font-medium rounded-full transition-all duration-300 hover:scale-105 cursor-pointer"
                             style={{
-                              boxShadow: '0 0 12px rgba(147, 51, 234, 0.2), 0 4px 12px rgba(147, 51, 234, 0.1)',
-                              borderColor: 'hsl(262 83% 58% / 0.25)',
-                              background: 'linear-gradient(135deg, hsl(var(--background)), hsl(262 83% 98% / 0.6))'
+                              boxShadow: '0 0 0 1px rgba(147, 51, 234, 0.3) inset, 0 0 15px rgba(147, 51, 234, 0.5), 0 0 25px rgba(147, 51, 234, 0.25)'
                             }}
-                            title={`${skill.skill_name} - ${getProficiencyLabel(skill.proficiency_level)}`}
                           >
-                            <span>{skill.skill_name}</span>
-                            <span className="ml-2 text-xs text-purple-600 font-normal">
-                              {getProficiencyLabel(skill.proficiency_level)}
-                            </span>
-                          </div>
+                            {skill.skill_name}
+                          </button>
                         ))}
                     </div>
                   </div>
@@ -386,6 +381,55 @@ const DatabaseAboutSection = () => {
                       </div>
                     </Card>
                   ))}
+                </div>
+              </>
+            )}
+          </DialogContent>
+        </Dialog>
+
+        {/* Skill Detail Modal */}
+        <Dialog open={!!selectedSkill} onOpenChange={() => setSelectedSkill(null)}>
+          <DialogContent className="max-w-md">
+            {selectedSkill && (
+              <>
+                <DialogHeader>
+                  <DialogTitle className="text-2xl font-display">
+                    {selectedSkill.skill_name}
+                  </DialogTitle>
+                </DialogHeader>
+                
+                <div className="space-y-6">
+                  <div className="space-y-4">
+                    {/* Category */}
+                    <div className="flex items-center justify-between p-4 bg-muted rounded-lg">
+                      <span className="text-sm font-medium text-muted-foreground">Category</span>
+                      <Badge variant="outline" className="text-base">
+                        {selectedSkill.category}
+                      </Badge>
+                    </div>
+                    
+                    {/* Proficiency Level */}
+                    <div className="space-y-3 p-4 bg-muted rounded-lg">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium text-muted-foreground">Proficiency Level</span>
+                        <span className="font-semibold text-lg text-primary">
+                          {getProficiencyLabel(selectedSkill.proficiency_level)}
+                        </span>
+                      </div>
+                      
+                      <div className="w-full bg-background rounded-full h-3">
+                        <div 
+                          className={`h-3 rounded-full ${getSkillColor(selectedSkill.proficiency_level)} transition-all duration-500`}
+                          style={{ width: `${(selectedSkill.proficiency_level / 5) * 100}%` }}
+                        ></div>
+                      </div>
+                      
+                      <div className="flex justify-between text-xs text-muted-foreground">
+                        <span>Beginner</span>
+                        <span>Master</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </>
             )}
