@@ -1,6 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Code, Users, Award } from 'lucide-react';
-import { useScrollReveal } from '@/hooks/use-scroll-reveal';
 
 const StatsSection = () => {
   const [hasAnimated, setHasAnimated] = useState(false);
@@ -10,7 +9,7 @@ const StatsSection = () => {
     awards: 0
   });
   
-  const { isVisible: isVisibleSection, sectionRef } = useScrollReveal(600);
+  const sectionRef = useRef<HTMLDivElement>(null);
 
   const stats = [
     {
@@ -80,7 +79,7 @@ const StatsSection = () => {
   return (
     <section 
       ref={sectionRef} 
-      className={`py-20 relative transition-all duration-1000 ${isVisibleSection ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+      className="py-20 relative"
     >
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">

@@ -4,7 +4,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
-import { useScrollReveal } from '@/hooks/use-scroll-reveal';
 
 interface Certificate {
   id: string;
@@ -24,7 +23,6 @@ interface Certificate {
 const DatabaseCertificatesSection = () => {
   const [certificates, setCertificates] = useState<Certificate[]>([]);
   const [loading, setLoading] = useState(true);
-  const { isVisible, sectionRef } = useScrollReveal(600);
 
   useEffect(() => {
     fetchCertificates();
@@ -117,8 +115,7 @@ const DatabaseCertificatesSection = () => {
   return (
     <section 
       id="certificates" 
-      className={`py-20 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
-      ref={sectionRef}
+      className="py-20"
     >
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
