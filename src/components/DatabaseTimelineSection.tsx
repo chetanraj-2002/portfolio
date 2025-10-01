@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Calendar, MapPin, Briefcase, GraduationCap } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { supabase } from '@/integrations/supabase/client';
-import { useScroll3D } from '@/hooks/use-scroll-3d';
 
 interface TimelineItem {
   id: string;
@@ -19,10 +18,27 @@ interface TimelineItem {
 const DatabaseTimelineSection = () => {
   const [timelineItems, setTimelineItems] = useState<TimelineItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const { ref, transform, isVisible } = useScroll3D();
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetchTimelineData();
+    
+    // Intersection Observer for fade-in effect
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
   }, []);
 
   const fetchTimelineData = async () => {
@@ -117,14 +133,13 @@ const DatabaseTimelineSection = () => {
   }
 
   return (
-    <section className="py-20 relative overflow-hidden" ref={ref}>
-      <div 
-        className="container mx-auto px-6 scroll-3d"
-        style={{
-          transform: `perspective(2000px) rotateX(${transform.rotateX}deg) rotateY(${transform.rotateY}deg) scale(${transform.scale})`,
-          opacity: transform.opacity,
-        }}
-      >
+    <section 
+      ref={sectionRef}
+      className={`py-20 relative overflow-hidden transition-opacity duration-1000 ${
+        isVisible ? 'opacity-100' : 'opacity-0'
+      }`}
+    >
+      <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <h2 id="experience" className="text-4xl font-display font-bold text-gradient mb-4">My Journey</h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
