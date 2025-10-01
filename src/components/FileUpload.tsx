@@ -15,8 +15,8 @@ interface FileUploadProps {
 
 export const FileUpload: React.FC<FileUploadProps> = ({
   onFileUploaded,
-  accept = "image/*",
-  maxSize = 5,
+  accept = "image/jpeg,image/jpg,image/png,image/gif,image/webp,image/svg+xml,image/bmp,image/tiff",
+  maxSize = 10,
   className = "",
   placeholder = "Click to upload or drag and drop",
   currentFile

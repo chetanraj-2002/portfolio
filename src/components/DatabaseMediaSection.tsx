@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
 import { useScrollReveal } from '@/hooks/use-scroll-reveal';
+import { SlidingThumbnail } from '@/components/SlidingThumbnail';
 
 interface MediaItem {
   id: string;
@@ -25,6 +26,7 @@ const DatabaseMediaSection = () => {
   const [loading, setLoading] = useState(true);
   const [selectedMedia, setSelectedMedia] = useState<MediaItem | null>(null);
   const [filter, setFilter] = useState<string>('all');
+  const [showAll, setShowAll] = useState(false);
   const { isVisible, sectionRef } = useScrollReveal(600);
 
   useEffect(() => {
@@ -66,6 +68,8 @@ const DatabaseMediaSection = () => {
     
     setFilteredMedia(filtered);
   };
+
+  const displayedMedia = showAll ? filteredMedia : filteredMedia.slice(0, 6);
 
   const getMediaIcon = (type: string) => {
     switch (type) {
@@ -138,8 +142,13 @@ const DatabaseMediaSection = () => {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredMedia.map((item, index) => {
+          {displayedMedia.map((item, index) => {
             const Icon = getMediaIcon(item.media_type);
+            // Get multiple images if available (from tags or use same image)
+            const thumbnails = item.tags && item.tags.length > 0 
+              ? [item.thumbnail_url || item.media_url, ...item.tags.map(() => item.thumbnail_url || item.media_url)].slice(0, 5)
+              : [item.thumbnail_url || item.media_url];
+
             return (
               <Card 
                 key={item.id} 
@@ -154,11 +163,11 @@ const DatabaseMediaSection = () => {
                   </div>
                 )}
 
-                <div className="relative overflow-hidden rounded-t-lg">
-                  <img
-                    src={item.thumbnail_url || item.media_url || '/placeholder.svg'}
+                <div className="relative overflow-hidden rounded-t-lg h-48">
+                  <SlidingThumbnail
+                    images={thumbnails}
                     alt={item.title}
-                    className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
+                    className="transition-transform duration-300 group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-background/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                     <div className="flex gap-3">
@@ -210,6 +219,20 @@ const DatabaseMediaSection = () => {
             );
           })}
         </div>
+
+        {/* View More Button */}
+        {!showAll && filteredMedia.length > 6 && (
+          <div className="text-center mt-12">
+            <Button 
+              variant="outline" 
+              className="btn-hero"
+              onClick={() => setShowAll(true)}
+            >
+              <Eye className="w-4 h-4 mr-2" />
+              View More
+            </Button>
+          </div>
+        )}
 
         {/* No media message */}
         {filteredMedia.length === 0 && !loading && (

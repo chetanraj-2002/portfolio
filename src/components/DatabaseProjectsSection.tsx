@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
 import { useScrollReveal } from '@/hooks/use-scroll-reveal';
+import { SlidingThumbnail } from '@/components/SlidingThumbnail';
 
 interface Project {
   id: string;
@@ -136,70 +137,76 @@ const DatabaseProjectsSection = () => {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {displayedProjects.map((project, index) => (
-            <Card 
-              key={project.id} 
-              className="card-glass hover-lift group relative overflow-hidden"
-            >
-              {/* Featured badge */}
-              {project.featured && (
-                <div className="absolute top-4 left-4 z-10">
-                  <Badge className="bg-primary/20 text-primary border-primary/30">
-                    Featured
-                  </Badge>
-                </div>
-              )}
-              
-              <div className="relative overflow-hidden rounded-t-lg">
-                <img
-                  src={project.image_url || '/assets/project-placeholder.jpg'}
-                  alt={project.title}
-                  className="w-full h-56 object-cover transition-all duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          {displayedProjects.map((project, index) => {
+            // Create array of images for sliding (use same image multiple times if only one)
+            const projectImages = project.technologies && project.technologies.length > 0
+              ? [project.image_url, ...project.technologies.map(() => project.image_url)].slice(0, 5)
+              : [project.image_url];
+
+            return (
+              <Card
+                key={project.id} 
+                className="card-glass hover-lift group relative overflow-hidden"
+              >
+                {/* Featured badge */}
+                {project.featured && (
+                  <div className="absolute top-4 left-4 z-10">
+                    <Badge className="bg-primary/20 text-primary border-primary/30">
+                      Featured
+                    </Badge>
+                  </div>
+                )}
                 
-                {/* Overlay buttons */}
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
-                  <div className="flex gap-3">
-                    <Dialog>
-                      <DialogTrigger asChild>
+                <div className="relative overflow-hidden rounded-t-lg h-56">
+                  <SlidingThumbnail
+                    images={projectImages}
+                    alt={project.title}
+                    className="transition-all duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  
+                  {/* Overlay buttons */}
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+                    <div className="flex gap-3">
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button 
+                            size="sm" 
+                            variant="outline" 
+                            className="bg-background/20 backdrop-blur-sm border-white/20 text-white hover:bg-white/20"
+                            onClick={() => setSelectedProject(project)}
+                          >
+                            <Eye className="w-4 h-4 mr-2" />
+                            View
+                          </Button>
+                        </DialogTrigger>
+                      </Dialog>
+                      
+                      {project.demo_link && (
+                        <Button 
+                          size="sm" 
+                          className="btn-hero"
+                          onClick={() => window.open(project.demo_link, '_blank')}
+                        >
+                          <ExternalLink className="w-4 h-4 mr-2" />
+                          Demo
+                        </Button>
+                      )}
+                      
+                      {project.repo_link && (
                         <Button 
                           size="sm" 
                           variant="outline" 
                           className="bg-background/20 backdrop-blur-sm border-white/20 text-white hover:bg-white/20"
-                          onClick={() => setSelectedProject(project)}
+                          onClick={() => window.open(project.repo_link, '_blank')}
                         >
-                          <Eye className="w-4 h-4 mr-2" />
-                          View
+                          <Github className="w-4 h-4 mr-2" />
+                          Code
                         </Button>
-                      </DialogTrigger>
-                    </Dialog>
-                    
-                    {project.demo_link && (
-                      <Button 
-                        size="sm" 
-                        className="btn-hero"
-                        onClick={() => window.open(project.demo_link, '_blank')}
-                      >
-                        <ExternalLink className="w-4 h-4 mr-2" />
-                        Demo
-                      </Button>
-                    )}
-                    
-                    {project.repo_link && (
-                      <Button 
-                        size="sm" 
-                        variant="outline" 
-                        className="bg-background/20 backdrop-blur-sm border-white/20 text-white hover:bg-white/20"
-                        onClick={() => window.open(project.repo_link, '_blank')}
-                      >
-                        <Github className="w-4 h-4 mr-2" />
-                        Code
-                      </Button>
-                    )}
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
               
               <CardHeader className="pb-3">
                 <CardTitle className="text-xl font-display group-hover:text-primary transition-colors">
@@ -232,7 +239,8 @@ const DatabaseProjectsSection = () => {
               {/* Decorative border */}
               <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary to-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </Card>
-          ))}
+            );
+          })}
         </div>
 
         {/* View More Button */}

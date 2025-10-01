@@ -5,14 +5,6 @@ export const useScrollReveal = (delay: number = 600) => {
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Only apply animations on mobile
-    const isMobile = window.innerWidth < 768;
-    
-    if (!isMobile) {
-      setIsVisible(true);
-      return;
-    }
-
     const section = sectionRef.current;
     if (!section) return;
 
