@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 
 export const useScroll3D = () => {
   const ref = useRef<HTMLDivElement>(null);
-  const [transform, setTransform] = useState({ rotateX: 0, rotateY: 0, scale: 0.7, opacity: 0 });
+  const [transform, setTransform] = useState({ rotateX: 0, rotateY: 0, scale: 0.85, opacity: 0.3 });
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -23,15 +23,15 @@ export const useScroll3D = () => {
         setIsVisible(true);
       }
       
-      // Calculate rotation based on scroll position - much more dramatic
-      const maxRotation = 45;
+      // Calculate rotation based on scroll position - reduced angles
+      const maxRotation = 20;
       const rotateX = (distanceFromCenter / windowHeight) * maxRotation;
-      const rotateY = (distanceFromCenter / windowHeight) * 15;
+      const rotateY = (distanceFromCenter / windowHeight) * 8;
       
-      // Calculate scale and opacity based on visibility - much more intense
-      const visibility = Math.max(0, Math.min(1, 1 - Math.abs(distanceFromCenter) / (windowHeight * 0.6)));
-      const scale = 0.6 + visibility * 0.4; // From 0.6 to 1.0
-      const opacity = Math.max(0, visibility * 1.2); // More dramatic opacity change
+      // Calculate scale and opacity based on visibility - reduced intensity
+      const visibility = Math.max(0, Math.min(1, 1 - Math.abs(distanceFromCenter) / (windowHeight * 0.7)));
+      const scale = 0.85 + visibility * 0.15; // From 0.85 to 1.0
+      const opacity = Math.max(0.3, visibility); // From 0.3 to 1.0
 
       setTransform({ rotateX, rotateY, scale, opacity });
     };
