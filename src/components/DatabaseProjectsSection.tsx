@@ -34,6 +34,20 @@ const DatabaseProjectsSection = () => {
   }, []);
 
   useEffect(() => {
+    const checkInitialVisibility = () => {
+      if (sectionRef.current) {
+        const rect = sectionRef.current.getBoundingClientRect();
+        const isInViewport = rect.top < window.innerHeight && rect.bottom > 0;
+        if (isInViewport) {
+          setIsVisible(true);
+          return true;
+        }
+      }
+      return false;
+    };
+
+    if (checkInitialVisibility()) return;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
