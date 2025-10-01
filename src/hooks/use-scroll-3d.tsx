@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 
 export const useScroll3D = () => {
   const ref = useRef<HTMLDivElement>(null);
-  const [transform, setTransform] = useState({ rotateX: 0, rotateY: 0, scale: 1 });
+  const [transform, setTransform] = useState({ rotateX: 0, rotateY: 0, scale: 0.95, opacity: 0 });
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -10,27 +11,38 @@ export const useScroll3D = () => {
 
       const rect = ref.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
+      const elementTop = rect.top;
+      const elementBottom = rect.bottom;
       const elementCenter = rect.top + rect.height / 2;
       const distanceFromCenter = elementCenter - windowHeight / 2;
       
-      // Calculate rotation based on scroll position
-      const maxRotation = 15;
-      const rotateX = (distanceFromCenter / windowHeight) * maxRotation;
+      // Check if element is in viewport
+      const inViewport = elementTop < windowHeight * 0.85 && elementBottom > windowHeight * 0.15;
       
-      // Calculate scale based on visibility
-      const visibility = Math.max(0, Math.min(1, 1 - Math.abs(distanceFromCenter) / windowHeight));
-      const scale = 0.9 + visibility * 0.1;
+      if (inViewport && !isVisible) {
+        setIsVisible(true);
+      }
+      
+      // Calculate rotation based on scroll position - more dramatic
+      const maxRotation = 25;
+      const rotateX = (distanceFromCenter / windowHeight) * maxRotation;
+      const rotateY = (distanceFromCenter / windowHeight) * 5;
+      
+      // Calculate scale and opacity based on visibility
+      const visibility = Math.max(0, Math.min(1, 1 - Math.abs(distanceFromCenter) / (windowHeight * 0.8)));
+      const scale = 0.85 + visibility * 0.15;
+      const opacity = Math.max(0.3, visibility);
 
-      setTransform({ rotateX, rotateY: 0, scale });
+      setTransform({ rotateX, rotateY, scale, opacity });
     };
 
     window.addEventListener('scroll', handleScroll);
     handleScroll(); // Initial call
 
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [isVisible]);
 
-  return { ref, transform };
+  return { ref, transform, isVisible };
 };
 
 export const useMouseMove3D = () => {
@@ -48,8 +60,8 @@ export const useMouseMove3D = () => {
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
       
-      const rotateY = ((x - centerX) / centerX) * 10;
-      const rotateX = ((centerY - y) / centerY) * 10;
+      const rotateY = ((x - centerX) / centerX) * 15;
+      const rotateX = ((centerY - y) / centerY) * 15;
 
       setTransform({ rotateX, rotateY });
     };

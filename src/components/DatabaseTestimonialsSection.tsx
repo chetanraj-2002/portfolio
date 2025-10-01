@@ -20,7 +20,7 @@ const DatabaseTestimonialsSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
-  const { ref, transform } = useScroll3D();
+  const { ref, transform, isVisible } = useScroll3D();
 
   useEffect(() => {
     fetchTestimonials();
@@ -109,9 +109,10 @@ const DatabaseTestimonialsSection = () => {
   return (
     <section className="py-20 relative overflow-hidden" ref={ref}>
       <div 
-        className="container mx-auto px-6 scroll-3d"
+        className="container mx-auto px-6 scroll-3d transition-all duration-700"
         style={{
-          transform: `perspective(1000px) rotateX(${transform.rotateX}deg) scale(${transform.scale})`,
+          transform: `perspective(1500px) rotateX(${transform.rotateX}deg) rotateY(${transform.rotateY}deg) scale(${transform.scale})`,
+          opacity: transform.opacity,
         }}
       >
         <div className="text-center mb-16">

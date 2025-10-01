@@ -11,7 +11,7 @@ const StatsSection = () => {
   });
   
   const sectionRef = useRef<HTMLDivElement>(null);
-  const { ref: scroll3dRef, transform } = useScroll3D();
+  const { ref: scroll3dRef, transform, isVisible: is3DVisible } = useScroll3D();
 
   const stats = [
     {
@@ -87,9 +87,10 @@ const StatsSection = () => {
   return (
     <section ref={scroll3dRef} className="py-20 relative">
       <div 
-        className="container mx-auto px-6 scroll-3d"
+        className="container mx-auto px-6 scroll-3d transition-all duration-700"
         style={{
-          transform: `perspective(1000px) rotateX(${transform.rotateX}deg) scale(${transform.scale})`,
+          transform: `perspective(1500px) rotateX(${transform.rotateX}deg) rotateY(${transform.rotateY}deg) scale(${transform.scale})`,
+          opacity: transform.opacity,
         }}
       >
         <div className="text-center mb-16">
