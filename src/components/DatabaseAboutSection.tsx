@@ -126,9 +126,9 @@ const DatabaseAboutSection = () => {
   return (
     <section id="about" className="py-20" ref={ref}>
       <div 
-        className="container mx-auto px-6 scroll-3d transition-all duration-700"
+        className="container mx-auto px-6 scroll-3d"
         style={{
-          transform: `perspective(1500px) rotateX(${transform.rotateX}deg) rotateY(${transform.rotateY}deg) scale(${transform.scale})`,
+          transform: `perspective(2000px) rotateX(${transform.rotateX}deg) rotateY(${transform.rotateY}deg) scale(${transform.scale})`,
           opacity: transform.opacity,
         }}
       >

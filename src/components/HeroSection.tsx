@@ -132,9 +132,8 @@ const HeroSection = () => {
               </h1>
               
               <div className="text-2xl lg:text-3xl font-medium text-muted-foreground min-h-[40px]">
-                <span className="typewriter">
+                <span>
                   {text}
-                  <span className="animate-blink-caret">|</span>
                 </span>
               </div>
               

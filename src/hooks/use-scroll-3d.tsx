@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 
 export const useScroll3D = () => {
   const ref = useRef<HTMLDivElement>(null);
-  const [transform, setTransform] = useState({ rotateX: 0, rotateY: 0, scale: 0.95, opacity: 0 });
+  const [transform, setTransform] = useState({ rotateX: 0, rotateY: 0, scale: 0.7, opacity: 0 });
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -17,21 +17,21 @@ export const useScroll3D = () => {
       const distanceFromCenter = elementCenter - windowHeight / 2;
       
       // Check if element is in viewport
-      const inViewport = elementTop < windowHeight * 0.85 && elementBottom > windowHeight * 0.15;
+      const inViewport = elementTop < windowHeight * 0.75 && elementBottom > windowHeight * 0.25;
       
       if (inViewport && !isVisible) {
         setIsVisible(true);
       }
       
-      // Calculate rotation based on scroll position - more dramatic
-      const maxRotation = 25;
+      // Calculate rotation based on scroll position - much more dramatic
+      const maxRotation = 45;
       const rotateX = (distanceFromCenter / windowHeight) * maxRotation;
-      const rotateY = (distanceFromCenter / windowHeight) * 5;
+      const rotateY = (distanceFromCenter / windowHeight) * 15;
       
-      // Calculate scale and opacity based on visibility
-      const visibility = Math.max(0, Math.min(1, 1 - Math.abs(distanceFromCenter) / (windowHeight * 0.8)));
-      const scale = 0.85 + visibility * 0.15;
-      const opacity = Math.max(0.3, visibility);
+      // Calculate scale and opacity based on visibility - much more intense
+      const visibility = Math.max(0, Math.min(1, 1 - Math.abs(distanceFromCenter) / (windowHeight * 0.6)));
+      const scale = 0.6 + visibility * 0.4; // From 0.6 to 1.0
+      const opacity = Math.max(0, visibility * 1.2); // More dramatic opacity change
 
       setTransform({ rotateX, rotateY, scale, opacity });
     };
