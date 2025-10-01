@@ -168,7 +168,6 @@ const DatabaseMediaSection = () => {
                     images={thumbnails}
                     alt={item.title}
                     className="transition-transform duration-300 group-hover:scale-110"
-                    startOnHover={true}
                   />
                   <div className="absolute inset-0 bg-background/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                     <div className="flex gap-3">
