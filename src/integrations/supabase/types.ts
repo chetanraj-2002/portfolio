@@ -260,48 +260,6 @@ export type Database = {
         }
         Relationships: []
       }
-      payment_transactions: {
-        Row: {
-          amount: number
-          completed_at: string | null
-          created_at: string | null
-          currency: string | null
-          customer_email: string
-          customer_name: string | null
-          id: string
-          service_description: string | null
-          service_type: string
-          status: string
-          stripe_payment_intent_id: string | null
-        }
-        Insert: {
-          amount: number
-          completed_at?: string | null
-          created_at?: string | null
-          currency?: string | null
-          customer_email: string
-          customer_name?: string | null
-          id?: string
-          service_description?: string | null
-          service_type: string
-          status: string
-          stripe_payment_intent_id?: string | null
-        }
-        Update: {
-          amount?: number
-          completed_at?: string | null
-          created_at?: string | null
-          currency?: string | null
-          customer_email?: string
-          customer_name?: string | null
-          id?: string
-          service_description?: string | null
-          service_type?: string
-          status?: string
-          stripe_payment_intent_id?: string | null
-        }
-        Relationships: []
-      }
       portfolio_projects: {
         Row: {
           admin_id: string

@@ -1,12 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
-import { Code, Users, Coffee, Award } from 'lucide-react';
+import { Code, Users, Award } from 'lucide-react';
 
 const StatsSection = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [counts, setCounts] = useState({
     projects: 0,
     clients: 0,
-    coffee: 0,
     awards: 0
   });
   
@@ -26,13 +25,6 @@ const StatsSection = () => {
       label: 'Happy Clients',
       suffix: '+',
       key: 'clients' as keyof typeof counts
-    },
-    {
-      icon: Coffee,
-      target: 1000,
-      label: 'Cups of Coffee',
-      suffix: '+',
-      key: 'coffee' as keyof typeof counts
     },
     {
       icon: Award,
@@ -94,7 +86,7 @@ const StatsSection = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {stats.map((stat, index) => {
             const Icon = stat.icon;
             return (
