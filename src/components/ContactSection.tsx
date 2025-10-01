@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,8 +7,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { useScroll3D } from '@/hooks/use-scroll-3d';
-import { useIsMobile } from '@/hooks/use-mobile';
 
 const ContactSection = () => {
   const [formData, setFormData] = useState({
@@ -19,9 +17,26 @@ const ContactSection = () => {
     message: ''
   });
   const [loading, setLoading] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const { toast } = useToast();
-  const { ref, transform, isVisible } = useScroll3D();
-  const isMobile = useIsMobile();
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   const contactInfo = [
     {
@@ -100,14 +115,12 @@ const ContactSection = () => {
   };
 
   return (
-    <section id="contact" className="py-20" ref={ref}>
-      <div 
-        className="container mx-auto px-6 scroll-3d"
-        style={isMobile ? {} : {
-          transform: `perspective(2000px) rotateX(${transform.rotateX}deg) rotateY(${transform.rotateY}deg) scale(${transform.scale})`,
-          opacity: transform.opacity,
-        }}
-      >
+    <section 
+      id="contact" 
+      className={`py-20 transition-opacity duration-1000 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
+      ref={sectionRef}
+    >
+      <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-gradient mb-4">Get In Touch</h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
