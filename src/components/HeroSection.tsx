@@ -222,32 +222,11 @@ const HeroSection = () => {
       {/* Resume Viewer Dialog */}
       <Dialog open={isResumeOpen} onOpenChange={setIsResumeOpen}>
         <DialogContent className="max-w-6xl h-[90vh] p-0">
-          <DialogHeader className="px-6 py-4 border-b">
-            <div className="flex items-center justify-between">
-              <DialogTitle className="text-xl font-semibold">Resume - {adminProfile?.full_name || 'Chetanraj Jakanur'}</DialogTitle>
-              <Button
-                variant="default"
-                size="sm"
-                onClick={() => {
-                  const link = document.createElement('a');
-                  link.href = '/ChetanrajJakanur_Resume.pdf';
-                  link.download = 'ChetanrajJakanur_Resume.pdf';
-                  link.click();
-                }}
-                className="gap-2"
-              >
-                <Download className="w-4 h-4" />
-                Download PDF
-              </Button>
-            </div>
-          </DialogHeader>
-          <div className="flex-1 overflow-hidden">
-            <iframe
-              src="/ChetanrajJakanur_Resume.pdf"
-              className="w-full h-full"
-              title="Resume PDF Viewer"
-            />
-          </div>
+          <iframe
+            src="/ChetanrajJakanur_Resume.pdf"
+            className="w-full h-full"
+            title="Resume PDF Viewer"
+          />
         </DialogContent>
       </Dialog>
     </section>
