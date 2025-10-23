@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Github, Linkedin, Mail, Download, Code, Sparkles } from 'lucide-react';
+import { Github, Linkedin, Mail, Download, Code, Sparkles, FileText, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { supabase } from '@/integrations/supabase/client';
 import profileImage from '@/assets/chetanraj-profile.jpg';
 
@@ -21,6 +22,7 @@ const HeroSection = () => {
   const titles = ['Cloud Engineer', 'Full Stack Developer', 'Database Engineer'];
   const [currentTitleIndex, setCurrentTitleIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isResumeOpen, setIsResumeOpen] = useState(false);
   
   useEffect(() => {
     const currentTitle = titles[currentTitleIndex];
@@ -165,15 +167,10 @@ const HeroSection = () => {
             <div className="flex flex-col sm:flex-row gap-4">
               <Button 
                 className="btn-hero group"
-                onClick={() => {
-                  const link = document.createElement('a');
-                  link.href = '/ChetanrajJakanur_Resume.pdf';
-                  link.download = 'ChetanrajJakanur_Resume.pdf';
-                  link.click();
-                }}
+                onClick={() => setIsResumeOpen(true)}
               >
-                <Download className="w-4 h-4 mr-2 group-hover:animate-bounce" />
-                Download Resume
+                <FileText className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
+                View Resume
               </Button>
               <Button 
                 variant="outline" 
@@ -221,6 +218,38 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
+
+      {/* Resume Viewer Dialog */}
+      <Dialog open={isResumeOpen} onOpenChange={setIsResumeOpen}>
+        <DialogContent className="max-w-6xl h-[90vh] p-0">
+          <DialogHeader className="px-6 py-4 border-b">
+            <div className="flex items-center justify-between">
+              <DialogTitle className="text-xl font-semibold">Resume - {adminProfile?.full_name || 'Chetanraj Jakanur'}</DialogTitle>
+              <Button
+                variant="default"
+                size="sm"
+                onClick={() => {
+                  const link = document.createElement('a');
+                  link.href = '/ChetanrajJakanur_Resume.pdf';
+                  link.download = 'ChetanrajJakanur_Resume.pdf';
+                  link.click();
+                }}
+                className="gap-2"
+              >
+                <Download className="w-4 h-4" />
+                Download PDF
+              </Button>
+            </div>
+          </DialogHeader>
+          <div className="flex-1 overflow-hidden">
+            <iframe
+              src="/ChetanrajJakanur_Resume.pdf"
+              className="w-full h-full"
+              title="Resume PDF Viewer"
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };
