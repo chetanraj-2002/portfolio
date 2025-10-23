@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Github, Linkedin, Mail, Download, Code, Sparkles, FileText, X } from 'lucide-react';
+import { Github, Linkedin, Mail, Download, Code, Sparkles, FileText, X, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { supabase } from '@/integrations/supabase/client';
 import profileImage from '@/assets/chetanraj-profile.jpg';
 
@@ -23,6 +23,7 @@ const HeroSection = () => {
   const [currentTitleIndex, setCurrentTitleIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isResumeOpen, setIsResumeOpen] = useState(false);
+  const [isPdfLoading, setIsPdfLoading] = useState(true);
   
   useEffect(() => {
     const currentTitle = titles[currentTitleIndex];
@@ -220,12 +221,27 @@ const HeroSection = () => {
       </div>
 
       {/* Resume Viewer Dialog */}
-      <Dialog open={isResumeOpen} onOpenChange={setIsResumeOpen}>
-        <DialogContent className="max-w-6xl h-[90vh] p-0">
+      <Dialog open={isResumeOpen} onOpenChange={(open) => {
+        setIsResumeOpen(open);
+        if (open) setIsPdfLoading(true);
+      }}>
+        <DialogContent className="max-w-6xl h-[90vh] p-0" aria-describedby="resume-viewer-description">
+          <span id="resume-viewer-description" className="sr-only">
+            PDF viewer displaying {adminProfile?.full_name || 'Chetanraj Jakanur'}'s resume
+          </span>
+          {isPdfLoading && (
+            <div className="absolute inset-0 flex items-center justify-center bg-background/95 z-10">
+              <div className="flex flex-col items-center gap-3">
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                <p className="text-sm text-muted-foreground">Loading resume...</p>
+              </div>
+            </div>
+          )}
           <iframe
             src="/ChetanrajJakanur_Resume.pdf"
             className="w-full h-full"
             title="Resume PDF Viewer"
+            onLoad={() => setIsPdfLoading(false)}
           />
         </DialogContent>
       </Dialog>
